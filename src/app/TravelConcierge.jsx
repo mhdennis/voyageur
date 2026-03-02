@@ -1568,7 +1568,7 @@ function HotelFlightBlock({ dest, totalPoints, flights, homeAirport, travelDates
               </div>
             </div>
             {(() => { const url = buildCheckPriceUrl(h, dest, travelDates); return url ? <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 8, padding: "10px 16px", borderRadius: 8, background: "var(--sage)", color: "#fff", fontSize: 12, fontWeight: 500, textAlign: "center", textDecoration: "none", letterSpacing: "0.04em", cursor: "pointer", transition: "opacity 0.2s" }} onMouseEnter={e=>e.currentTarget.style.opacity="0.88"} onMouseLeave={e=>e.currentTarget.style.opacity="1"}>Check Live Price →</a> : null; })()}
-            {h.comparePriceUrl && <a href={h.comparePriceUrl} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 4, fontSize: 11, color: "var(--text-muted)", textAlign: "center", textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>Compare on MaxMyPoint</a>}
+            {h.comparePriceUrl && <a href={`https://search.maxmypoint.com/?query=${encodeURIComponent(h.name)}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 4, fontSize: 11, color: "var(--text-muted)", textAlign: "center", textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>Compare on MaxMyPoint</a>}
           </div>
         ))}
       </div>
