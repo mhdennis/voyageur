@@ -884,43 +884,107 @@ export default function TravelConcierge() {
             </div>
           )}
           {onboardingStep === 4 && (() => {
-            const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-            const daysInMonth = (m) => { if (!m) return 31; return new Date(2025, m, 0).getDate(); };
-            const selMonth = travelDates?.month || "";
-            const selDay = travelDates?.day || "";
             const selFlex = travelDates?.flexibility || "";
+            const startDate = travelDates?.startDate || null;
+            const endDate = travelDates?.endDate || null;
             const isFlexible = selFlex === "flexible";
-            const canContinue = !!selFlex && (isFlexible || (selMonth && selDay));
-            const setField = (field, val) => setTravelDates(prev => ({ ...(prev || {}), [field]: val }));
+            const canContinue = isFlexible || (startDate && endDate && selFlex);
             const FLEX_OPTIONS = [
               { id: "exact", icon: "📍", label: "Exact dates", color: "var(--sage)" },
               { id: "3_days", icon: "📅", label: "± 3 days", color: "var(--sky)" },
               { id: "1_week", icon: "🗓️", label: "± 1 week", color: "var(--warm-gold)" },
               { id: "flexible", icon: "✨", label: "I'm flexible", color: "var(--terracotta)" },
             ];
+            const today = new Date(); today.setHours(0,0,0,0);
+            const [calMonth, setCalMonth] = useState(today.getMonth());
+            const [calYear, setCalYear] = useState(today.getFullYear());
+            const MNAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+            const DNAMES = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+            const toStr = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+            const fromStr = (s) => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d); };
+            const fmtShort = (s) => { if (!s) return "—"; const d = fromStr(s); return d.toLocaleDateString("en-US",{month:"short",day:"numeric"}); };
+            const handleDayClick = (dateStr) => {
+              if (isFlexible) return;
+              if (!startDate || (startDate && endDate)) { setTravelDates(prev => ({ flexibility: prev?.flexibility || "", startDate: dateStr, endDate: null })); }
+              else if (dateStr < startDate) { setTravelDates(prev => ({ ...prev, startDate: dateStr, endDate: null })); }
+              else { setTravelDates(prev => ({ ...prev, endDate: dateStr })); }
+            };
+            const prevMonth = () => { if (calMonth === 0) { setCalMonth(11); setCalYear(calYear-1); } else setCalMonth(calMonth-1); };
+            const nextMonth = () => { if (calMonth === 11) { setCalMonth(0); setCalYear(calYear+1); } else setCalMonth(calMonth+1); };
+            const renderMonth = (mo, yr) => {
+              const first = new Date(yr, mo, 1); const days = new Date(yr, mo+1, 0).getDate(); const startDay = first.getDay();
+              const cells = []; for (let i=0;i<startDay;i++) cells.push(null); for (let d=1;d<=days;d++) cells.push(d);
+              return (
+                <div style={{ minWidth: 220 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 0, marginBottom: 4 }}>
+                    {DNAMES.map(d => <div key={d} style={{ textAlign: "center", fontSize: 10, color: "var(--text-muted)", fontWeight: 600, padding: "4px 0", letterSpacing: "0.05em" }}>{d}</div>)}
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 1 }}>
+                    {cells.map((d, i) => {
+                      if (!d) return <div key={`e${i}`} />;
+                      const ds = toStr(new Date(yr, mo, d));
+                      const isPast = new Date(yr,mo,d) < today;
+                      const isStart = ds === startDate;
+                      const isEnd = ds === endDate;
+                      const inRange = startDate && endDate && ds > startDate && ds < endDate;
+                      const isSelected = isStart || isEnd;
+                      return (
+                        <button key={ds} onClick={() => !isPast && handleDayClick(ds)} disabled={isPast || isFlexible}
+                          style={{
+                            width: "100%", aspectRatio: "1", display: "flex", alignItems: "center", justifyContent: "center",
+                            fontSize: 12, fontWeight: isSelected ? 600 : 400, border: "none", cursor: isPast || isFlexible ? "default" : "pointer",
+                            borderRadius: isStart && isEnd ? 8 : isStart ? "8px 0 0 8px" : isEnd ? "0 8px 8px 0" : inRange ? 0 : 8,
+                            background: isSelected ? "var(--sage)" : inRange ? "var(--sage-dim)" : "transparent",
+                            color: isSelected ? "#fff" : isPast ? "var(--border-strong)" : inRange ? "var(--sage-dark)" : "var(--text-primary)",
+                            transition: "all 0.15s",
+                          }}>
+                          {d}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            };
+            const m2 = calMonth === 11 ? 0 : calMonth + 1;
+            const y2 = calMonth === 11 ? calYear + 1 : calYear;
             return (
             <div className="fade-up">
               <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 4 OF 6</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>When are you planning to travel?</h2>
-              <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 28, fontWeight: 300 }}>Pick a target date, or tell us you're flexible.</p>
-              <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 24, opacity: isFlexible ? 0.4 : 1, transition: "opacity 0.2s" }}>
-                <select value={selMonth} onChange={e => setField("month", e.target.value ? Number(e.target.value) : "")} disabled={isFlexible}
-                  style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border-strong)", background: "var(--card-bg)", color: "var(--text-primary)", fontSize: 13, minWidth: 140, cursor: "pointer" }}>
-                  <option value="">Month</option>
-                  {MONTHS.map((m,i) => <option key={i} value={i+1}>{m}</option>)}
-                </select>
-                <select value={selDay} onChange={e => setField("day", e.target.value ? Number(e.target.value) : "")} disabled={isFlexible}
-                  style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border-strong)", background: "var(--card-bg)", color: "var(--text-primary)", fontSize: 13, minWidth: 90, cursor: "pointer" }}>
-                  <option value="">Day</option>
-                  {Array.from({ length: daysInMonth(selMonth) }, (_, i) => <option key={i+1} value={i+1}>{i+1}</option>)}
-                </select>
+              <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 20, fontWeight: 300 }}>Select your check-in and check-out dates.</p>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center", marginBottom: 20 }}>
+                <div style={{ padding: "8px 20px", borderRadius: 8, background: startDate ? "var(--sage-dim)" : "var(--cream)", border: `1px solid ${startDate ? "var(--sage)" : "var(--border-strong)"}`, textAlign: "center", minWidth: 110 }}>
+                  <div style={{ fontSize: 9, fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.1em", marginBottom: 2 }}>CHECK-IN</div>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: startDate ? "var(--sage-dark)" : "var(--text-muted)" }}>{fmtShort(startDate)}</div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", color: "var(--text-muted)", fontSize: 16 }}>→</div>
+                <div style={{ padding: "8px 20px", borderRadius: 8, background: endDate ? "var(--sage-dim)" : "var(--cream)", border: `1px solid ${endDate ? "var(--sage)" : "var(--border-strong)"}`, textAlign: "center", minWidth: 110 }}>
+                  <div style={{ fontSize: 9, fontWeight: 600, color: "var(--text-muted)", letterSpacing: "0.1em", marginBottom: 2 }}>CHECK-OUT</div>
+                  <div style={{ fontSize: 14, fontWeight: 500, color: endDate ? "var(--sage-dark)" : "var(--text-muted)" }}>{fmtShort(endDate)}</div>
+                </div>
               </div>
-              <p style={{ color: "var(--text-secondary)", fontSize: 12, marginBottom: 12, fontWeight: 300 }}>How flexible are your dates?</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 32 }}>
+              <div style={{ opacity: isFlexible ? 0.35 : 1, transition: "opacity 0.2s", background: "var(--card-bg)", borderRadius: 14, border: "1px solid var(--border)", padding: "16px 12px", maxWidth: 500, margin: "0 auto 20px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, padding: "0 4px" }}>
+                  <button onClick={prevMonth} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "var(--text-secondary)", padding: "4px 8px" }}>‹</button>
+                  <div style={{ display: "flex", gap: 32 }}>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>{MNAMES[calMonth]} {calYear}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>{MNAMES[m2]} {y2}</span>
+                  </div>
+                  <button onClick={nextMonth} style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "var(--text-secondary)", padding: "4px 8px" }}>›</button>
+                </div>
+                <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+                  {renderMonth(calMonth, calYear)}
+                  {renderMonth(m2, y2)}
+                </div>
+              </div>
+              {startDate && endDate && <p style={{ textAlign: "center", fontSize: 12, color: "var(--sage-dark)", marginBottom: 12, fontWeight: 500 }}>{Math.round((fromStr(endDate)-fromStr(startDate))/(1000*60*60*24))} nights · {fmtShort(startDate)} – {fmtShort(endDate)}</p>}
+              <p style={{ color: "var(--text-secondary)", fontSize: 12, marginBottom: 10, fontWeight: 300, textAlign: "center" }}>How flexible are your dates?</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 28 }}>
                 {FLEX_OPTIONS.map(o => <SelectPill key={o.id} icon={o.icon} label={o.label} color={o.color} active={selFlex === o.id}
                   onClick={() => {
-                    if (o.id === "flexible") { setTravelDates({ flexibility: "flexible" }); }
-                    else { setTravelDates(prev => ({ month: prev?.month || "", day: prev?.day || "", flexibility: o.id })); }
+                    if (o.id === "flexible") { setTravelDates({ flexibility: "flexible", startDate: null, endDate: null }); }
+                    else { setTravelDates(prev => ({ startDate: prev?.startDate || null, endDate: prev?.endDate || null, flexibility: o.id })); }
                   }} />)}
               </div>
               <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
