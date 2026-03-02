@@ -620,18 +620,18 @@ function buildCheckPriceUrl(hotel, dest, travelDates) {
   }
 
   const hotelQuery = `${hotel.name}, ${dest.name}, ${dest.country}`.replace(/ /g, "+");
+  const locQuery = `${hotel.name}+${dest.name}+${dest.country}`.replace(/ /g, "+");
 
-  // Hyatt — FIXED: use /search/hotels/ path (not /shop/rooms)
+  // Hyatt — /shop/rooms path with location search + dates
   if (chain.includes("Hyatt")) {
-    const loc = encodeURIComponent(`${hotel.name}, ${dest.name}`);
-    let url = `https://www.hyatt.com/search/hotels/en-US/${encodeURIComponent(dest.name)}?location=${loc}&rooms=1&adults=1&kids=0&rate=Standard`;
+    let url = `https://www.hyatt.com/shop/rooms?location=${locQuery}&rooms=1&adults=1&kids=0`;
     if (startDate && endDate) url += `&checkinDate=${startDate}&checkoutDate=${endDate}`;
     return url;
   }
 
-  // Marriott (includes Autograph, Delta, Luxury Collection)
+  // Marriott (includes Autograph, Delta, Luxury Collection) — /search/default.mi
   if (chain.includes("Marriott") || chain.includes("Autograph") || chain.includes("Luxury Collection")) {
-    let url = `https://www.marriott.com/search/findHotels.mi?destinationAddress=${hotelQuery}&roomCount=1&numAdultsPerRoom=1`;
+    let url = `https://www.marriott.com/search/default.mi?destinationAddress=${hotelQuery}&roomCount=1&numAdultsPerRoom=1`;
     if (startDate && endDate) {
       const fmtM = (d) => { const [y,m,dd] = d.split("-"); return `${m}/${dd}/${y}`; };
       url += `&fromDate=${fmtM(startDate)}&toDate=${fmtM(endDate)}`;
@@ -639,20 +639,20 @@ function buildCheckPriceUrl(hotel, dest, travelDates) {
     return url;
   }
 
-  // Hilton
+  // Hilton — /en/search/ with dates
   if (chain.includes("Hilton")) {
-    let url = `https://www.hilton.com/en/search/find-hotels/?query=${hotelQuery}&numRooms=1&numAdults=1&numChildren=0`;
-    if (startDate && endDate) url += `&arrivalDate=${startDate}&departureDate=${endDate}`;
+    let url = `https://www.hilton.com/en/search/?query=${hotelQuery}&numRooms=1&numAdults=1&numChildren=0`;
+    if (startDate && endDate) url += `&arrivalDate=${startDate}&departureDate=${endDate}&flexibleDates=false`;
     return url;
   }
 
-  // IHG
+  // IHG — rewards redemption search with dates
   if (chain.includes("IHG")) {
-    let url = `https://www.ihg.com/hotels/us/en/find-hotels/hotel/list?qDest=${hotelQuery}&qAdlt=1&qChld=0&qRms=1`;
+    let url = `https://www.ihg.com/rewardsclub/us/en/redeem-rewards/hotel-rewards?query=${locQuery}`;
     if (startDate && endDate) {
       const [sy,sm,sd] = startDate.split("-");
       const [ey,em,ed] = endDate.split("-");
-      url += `&qCiD=${parseInt(sd)}&qCiMy=${sm}${sy}&qCoD=${parseInt(ed)}&qCoMy=${em}${ey}`;
+      url += `&checkInDate=${parseInt(sd)}&checkInMonthYear=${sm}${sy}&checkOutDate=${parseInt(ed)}&checkOutMonthYear=${em}${ey}`;
     }
     return url;
   }
