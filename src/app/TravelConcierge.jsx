@@ -137,6 +137,157 @@ const REGIONS = [
   { id: "indian_ocean", label: "Indian Ocean", icon: "🐠" },
 ];
 
+const US_METRO_AREAS = [
+  { city: "New York", airports: ["JFK", "EWR", "LGA"], primaryIntl: "JFK" },
+  { city: "Los Angeles", airports: ["LAX"], primaryIntl: "LAX" },
+  { city: "Chicago", airports: ["ORD", "MDW"], primaryIntl: "ORD" },
+  { city: "Houston", airports: ["IAH", "HOU"], primaryIntl: "IAH" },
+  { city: "Dallas–Fort Worth", airports: ["DFW", "DAL"], primaryIntl: "DFW" },
+  { city: "San Francisco", airports: ["SFO", "OAK"], primaryIntl: "SFO" },
+  { city: "Washington DC", airports: ["IAD", "DCA", "BWI"], primaryIntl: "IAD" },
+  { city: "Miami", airports: ["MIA", "FLL"], primaryIntl: "MIA" },
+  { city: "Atlanta", airports: ["ATL"], primaryIntl: "ATL" },
+  { city: "Boston", airports: ["BOS"], primaryIntl: "BOS" },
+  { city: "Seattle", airports: ["SEA"], primaryIntl: "SEA" },
+  { city: "Phoenix", airports: ["PHX"], primaryIntl: "PHX" },
+  { city: "Denver", airports: ["DEN"], primaryIntl: "DEN" },
+  { city: "Minneapolis", airports: ["MSP"], primaryIntl: "MSP" },
+  { city: "Detroit", airports: ["DTW"], primaryIntl: "DTW" },
+  { city: "Philadelphia", airports: ["PHL"], primaryIntl: "PHL" },
+  { city: "San Diego", airports: ["SAN"], primaryIntl: "SAN" },
+  { city: "Tampa", airports: ["TPA"], primaryIntl: "TPA" },
+  { city: "Charlotte", airports: ["CLT"], primaryIntl: "CLT" },
+  { city: "Portland", airports: ["PDX"], primaryIntl: "PDX" },
+  { city: "Nashville", airports: ["BNA"], primaryIntl: "BNA" },
+  { city: "Austin", airports: ["AUS"], primaryIntl: "AUS" },
+  { city: "Las Vegas", airports: ["LAS"], primaryIntl: "LAS" },
+  { city: "Salt Lake City", airports: ["SLC"], primaryIntl: "SLC" },
+  { city: "Honolulu", airports: ["HNL"], primaryIntl: "HNL" },
+  { city: "San Antonio", airports: ["SAT"], primaryIntl: "SAT" },
+  { city: "Columbus", airports: ["CMH"], primaryIntl: "CMH" },
+  { city: "Indianapolis", airports: ["IND"], primaryIntl: "IND" },
+  { city: "Raleigh", airports: ["RDU"], primaryIntl: "RDU" },
+  { city: "St. Louis", airports: ["STL"], primaryIntl: "STL" },
+];
+
+// Distance tier mile estimates (round-trip, per person)
+const DISTANCE_TIERS = {
+  domestic_short:   { economy: 12500,  business: 25000,  cash_econ: 180,  cash_biz: 450 },
+  domestic_long:    { economy: 25000,  business: 50000,  cash_econ: 320,  cash_biz: 750 },
+  caribbean_mexico: { economy: 25000,  business: 60000,  cash_econ: 340,  cash_biz: 850 },
+  central_america:  { economy: 30000,  business: 65000,  cash_econ: 350,  cash_biz: 900 },
+  south_america:    { economy: 60000,  business: 130000, cash_econ: 650,  cash_biz: 3200 },
+  transatlantic:    { economy: 60000,  business: 140000, cash_econ: 550,  cash_biz: 3000 },
+  transpacific:     { economy: 75000,  business: 160000, cash_econ: 850,  cash_biz: 4500 },
+  africa:           { economy: 75000,  business: 160000, cash_econ: 900,  cash_biz: 4200 },
+  middle_east:      { economy: 75000,  business: 150000, cash_econ: 700,  cash_biz: 3800 },
+  indian_ocean:     { economy: 80000,  business: 170000, cash_econ: 950,  cash_biz: 5000 },
+  oceania:          { economy: 80000,  business: 170000, cash_econ: 1000, cash_biz: 5500 },
+};
+
+// Region → distance tier mapping
+const REGION_TO_TIER = {
+  north_america: "domestic_long",
+  caribbean: "caribbean_mexico",
+  central_america: "central_america",
+  south_america: "south_america",
+  europe: "transatlantic",
+  asia: "transpacific",
+  africa: "africa",
+  middle_east: "middle_east",
+  indian_ocean: "indian_ocean",
+  oceania: "oceania",
+};
+
+// Airlines that serve each route tier, with program names matching CREDIT_CARDS transferPartners
+const AIRLINE_ROUTES = {
+  domestic_short: [
+    { airline: "United", loyaltyId: "united", econMiles: 12500, bizMiles: 25000, bizCabin: "First Class" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 12500, bizMiles: 25000, bizCabin: "First Class" },
+    { airline: "American Airlines", loyaltyId: "american", econMiles: 12500, bizMiles: 25000, bizCabin: "First Class" },
+    { airline: "Southwest", loyaltyId: "southwest", econMiles: 12000, bizMiles: null, bizCabin: null, econCabin: "Wanna Get Away" },
+  ],
+  domestic_long: [
+    { airline: "United", loyaltyId: "united", econMiles: 25000, bizMiles: 50000, bizCabin: "First Class" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 25000, bizMiles: 50000, bizCabin: "Delta One" },
+    { airline: "American Airlines", loyaltyId: "american", econMiles: 25000, bizMiles: 50000, bizCabin: "First Class" },
+    { airline: "JetBlue", loyaltyId: null, econMiles: 20000, bizMiles: 45000, bizCabin: "Mint Business" },
+  ],
+  caribbean_mexico: [
+    { airline: "United", loyaltyId: "united", econMiles: 17500, bizMiles: 35000, bizCabin: "Business" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 18000, bizMiles: 40000, bizCabin: "First Class" },
+    { airline: "JetBlue", loyaltyId: null, econMiles: 15000, bizMiles: 36000, bizCabin: "Mint Business" },
+    { airline: "Southwest", loyaltyId: "southwest", econMiles: 14000, bizMiles: null, bizCabin: null, econCabin: "Wanna Get Away" },
+  ],
+  central_america: [
+    { airline: "United", loyaltyId: "united", econMiles: 17500, bizMiles: 40000, bizCabin: "Business" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 20000, bizMiles: 45000, bizCabin: "First Class" },
+    { airline: "Avianca", loyaltyId: null, econMiles: 20000, bizMiles: 40000, bizCabin: "Business" },
+    { airline: "Southwest", loyaltyId: "southwest", econMiles: 16000, bizMiles: null, bizCabin: null, econCabin: "Wanna Get Away" },
+  ],
+  south_america: [
+    { airline: "United", loyaltyId: "united", econMiles: 40000, bizMiles: 80000, bizCabin: "Polaris Business" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 42000, bizMiles: 90000, bizCabin: "Delta One" },
+    { airline: "Avianca", loyaltyId: null, econMiles: 30000, bizMiles: 55000, bizCabin: "Business" },
+    { airline: "JetBlue", loyaltyId: null, econMiles: 25000, bizMiles: 50000, bizCabin: "Mint Business" },
+  ],
+  transatlantic: [
+    { airline: "United", loyaltyId: "united", econMiles: 30000, bizMiles: 70000, bizCabin: "Polaris Business" },
+    { airline: "British Airways", loyaltyId: null, econMiles: 26000, bizMiles: 60000, bizCabin: "Club World" },
+    { airline: "Air France", loyaltyId: null, econMiles: 29000, bizMiles: 62000, bizCabin: "Business" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 35000, bizMiles: 85000, bizCabin: "Delta One" },
+    { airline: "Turkish Airlines", loyaltyId: null, econMiles: 30000, bizMiles: 63000, bizCabin: "Business" },
+  ],
+  transpacific: [
+    { airline: "ANA", loyaltyId: null, econMiles: 55000, bizMiles: 88000, bizCabin: "Business (The Room)" },
+    { airline: "United", loyaltyId: "united", econMiles: 40000, bizMiles: 80000, bizCabin: "Polaris Business" },
+    { airline: "Singapore Airlines", loyaltyId: null, econMiles: 60000, bizMiles: 92000, bizCabin: "Business" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 45000, bizMiles: 85000, bizCabin: "Delta One" },
+  ],
+  africa: [
+    { airline: "Delta", loyaltyId: "delta", econMiles: 50000, bizMiles: 95000, bizCabin: "Delta One" },
+    { airline: "Turkish Airlines", loyaltyId: null, econMiles: 40000, bizMiles: 80000, bizCabin: "Business" },
+    { airline: "United", loyaltyId: "united", econMiles: 45000, bizMiles: 90000, bizCabin: "Polaris Business" },
+  ],
+  middle_east: [
+    { airline: "Turkish Airlines", loyaltyId: null, econMiles: 40000, bizMiles: 75000, bizCabin: "Business" },
+    { airline: "United", loyaltyId: "united", econMiles: 45000, bizMiles: 85000, bizCabin: "Polaris Business" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 45000, bizMiles: 90000, bizCabin: "Delta One" },
+  ],
+  indian_ocean: [
+    { airline: "Singapore Airlines", loyaltyId: null, econMiles: 65000, bizMiles: 95000, bizCabin: "Business" },
+    { airline: "Turkish Airlines", loyaltyId: null, econMiles: 55000, bizMiles: 90000, bizCabin: "Business" },
+    { airline: "United", loyaltyId: "united", econMiles: 55000, bizMiles: 100000, bizCabin: "Polaris Business" },
+  ],
+  oceania: [
+    { airline: "United", loyaltyId: "united", econMiles: 55000, bizMiles: 100000, bizCabin: "Polaris Business" },
+    { airline: "ANA", loyaltyId: null, econMiles: 60000, bizMiles: 105000, bizCabin: "Business (The Room)" },
+    { airline: "Delta", loyaltyId: "delta", econMiles: 55000, bizMiles: 95000, bizCabin: "Delta One" },
+  ],
+};
+
+// Hub airports for each airline — used to determine if a flight is direct or connecting
+const AIRLINE_HUBS = {
+  "United": ["EWR", "IAH", "ORD", "SFO", "LAX", "IAD", "DEN"],
+  "Delta": ["JFK", "ATL", "MSP", "DTW", "LAX", "SEA", "BOS", "SLC"],
+  "American Airlines": ["DFW", "CLT", "MIA", "ORD", "PHL", "PHX", "LAX"],
+  "JetBlue": ["JFK", "BOS", "FLL", "MCO", "LAX"],
+  "Southwest": ["DAL", "MDW", "BWI", "HOU", "DEN", "LAS", "PHX", "OAK", "ATL"],
+  "British Airways": ["JFK", "BOS", "MIA", "LAX", "SFO", "ORD", "IAD"],
+  "Air France": ["JFK", "LAX", "MIA", "SFO", "IAH", "ATL", "BOS", "IAD", "ORD", "DTW"],
+  "ANA": ["JFK", "ORD", "LAX", "SFO", "IAH", "IAD", "SEA"],
+  "Singapore Airlines": ["JFK", "LAX", "SFO", "IAH", "SEA"],
+  "Turkish Airlines": ["JFK", "LAX", "MIA", "ORD", "IAH", "IAD", "ATL", "BOS", "SFO", "DFW"],
+  "Avianca": ["JFK", "MIA", "LAX", "ORD", "IAH", "FLL"],
+  "Delta": ["JFK", "ATL", "MSP", "DTW", "LAX", "SEA", "BOS", "SLC"],
+};
+
+// Connecting hub for airlines on international routes
+const AIRLINE_CONNECT_HUBS = {
+  "ANA": "NRT", "Singapore Airlines": "SIN", "Turkish Airlines": "IST",
+  "British Airways": "LHR", "Air France": "CDG", "Avianca": "BOG",
+};
+
 const RATING_CATEGORIES = [
   { id: "food", label: "Food & Dining", icon: "🍽️", color: "#C4715B" },
   { id: "nightlife", label: "Nightlife & Social", icon: "🍸", color: "#8B7B8E" },
@@ -207,123 +358,123 @@ const DESTINATIONS = [
   { id: 1, name: "Tulum", country: "Mexico", region: "caribbean", image: "🌴", vibe: "popular", types: ["beach", "baecation", "girls_trip", "wellness"], bestMonths: [11,12,1,2,3,4], budgetTier: "mid", highlight: "Cenotes, beach clubs & Mayan ruins",
     tasteTags: ["beach_clubs","cenotes","mezcal_tequila","yoga_retreat","design_hotels","rooftop_bars","photo_spots","chill_slow"],
     hotels: [{ name: "Conrad Tulum Riviera Maya", chain: "Hilton", category: "Cat 50", pointsPerNight: 80000, cashPerNight: 450, distinctions: ["Forbes 4-Star", "FHR"] },{ name: "Hyatt Ziva Riviera Cancún", chain: "Hyatt", category: "Cat 5", pointsPerNight: 25000, cashPerNight: 320 },{ name: "Marriott Cancún Resort", chain: "Marriott", category: "Cat 6", pointsPerNight: 50000, cashPerNight: 280 }],
-    flights: [{ airline: "United", route: "EWR → CUN", cabin: "Economy", miles: 15000, cash: 320 },{ airline: "Delta", route: "JFK → CUN", cabin: "Economy", miles: 14000, cash: 340 },{ airline: "United", route: "EWR → CUN", cabin: "Business", miles: 35000, cash: 850 },{ airline: "JetBlue", route: "JFK → CUN", cabin: "Mint (Business)", miles: 32000, cash: 780 }]},
+    destinationAirports: ["CUN"] },
   { id: 2, name: "Bali", country: "Indonesia", region: "asia", image: "🛕", vibe: "popular", types: ["solo", "baecation", "wellness", "adventure", "family"], bestMonths: [4,5,6,7,8,9], budgetTier: "budget", highlight: "Rice terraces, temples & surf",
     tasteTags: ["temple_spiritual","surfing","yoga_retreat","spa_days","rice_terraces","coffee_culture","chill_slow","design_hotels","sunrise_hike"],
     hotels: [{ name: "Alila Villas Uluwatu", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 400, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"] },{ name: "W Bali - Seminyak", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 350, distinctions: ["Forbes 4-Star"] },{ name: "Four Points Seminyak", chain: "Marriott", category: "Cat 3", pointsPerNight: 20000, cashPerNight: 120 }],
-    flights: [{ airline: "Singapore Airlines", route: "JFK → DPS (via SIN)", cabin: "Economy", miles: 60000, cash: 850 },{ airline: "ANA", route: "JFK → DPS (via NRT)", cabin: "Business (The Room)", miles: 88000, cash: 3800 },{ airline: "Turkish Airlines", route: "JFK → DPS (via IST)", cabin: "Business", miles: 83000, cash: 3200 }]},
+    destinationAirports: ["DPS"] },
   { id: 3, name: "Park City", country: "USA", region: "north_america", image: "🎿", vibe: "popular", types: ["ski", "guys_trip", "family"], bestMonths: [12,1,2,3], budgetTier: "luxury", highlight: "World-class slopes & après-ski",
     tasteTags: ["hiking","luxury_splurge","craft_cocktails","lounge_vibes","family_friendly"],
     hotels: [{ name: "Hyatt Centric Park City", chain: "Hyatt", category: "Cat 5", pointsPerNight: 21000, cashPerNight: 350 },{ name: "Marriott Mountainside", chain: "Marriott", category: "Cat 6", pointsPerNight: 50000, cashPerNight: 420 },{ name: "Pendry Park City", chain: "Marriott (Autograph)", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 550, distinctions: ["Forbes 4-Star"] }],
-    flights: [{ airline: "Delta", route: "JFK → SLC", cabin: "Economy", miles: 12000, cash: 250 },{ airline: "United", route: "EWR → SLC", cabin: "Economy", miles: 12500, cash: 260 },{ airline: "Delta", route: "JFK → SLC", cabin: "First Class", miles: 25000, cash: 520 }]},
+    destinationAirports: ["SLC"] },
   { id: 4, name: "Lisbon", country: "Portugal", region: "europe", image: "🏛️", vibe: "popular", types: ["solo", "baecation", "city", "girls_trip", "family"], bestMonths: [3,4,5,6,9,10], budgetTier: "mid", highlight: "Pastéis de nata, trams & fado",
     tasteTags: ["street_food","natural_wine","walking_neighborhoods","art_galleries","coffee_culture","rooftop_bars","photo_spots","architecture","bookshops"],
     hotels: [{ name: "Hyatt Regency Lisboa", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 220 },{ name: "Moxy Lisbon City", chain: "Marriott", category: "Cat 4", pointsPerNight: 30000, cashPerNight: 160 },{ name: "Tivoli Avenida Liberdade", chain: "Minor (Amex FHR)", category: "FHR", pointsPerNight: null, cashPerNight: 320, distinctions: ["Forbes 4-Star", "FHR"] }],
-    flights: [{ airline: "United", route: "EWR → LIS", cabin: "Economy", miles: 30000, cash: 480 },{ airline: "British Airways", route: "JFK → LIS (via LHR)", cabin: "Economy", miles: 26000, cash: 520 },{ airline: "United", route: "EWR → LIS", cabin: "Polaris Business", miles: 60000, cash: 2800 },{ airline: "Air France", route: "JFK → LIS (via CDG)", cabin: "Business", miles: 55000, cash: 2600 }]},
+    destinationAirports: ["LIS"] },
   { id: 5, name: "Tokyo", country: "Japan", region: "asia", image: "🗼", vibe: "popular", types: ["solo", "city"], bestMonths: [3,4,10,11], budgetTier: "mid", highlight: "Ramen, cherry blossoms & Shibuya",
     tasteTags: ["street_food","coffee_culture","architecture","temple_spiritual","local_markets","photo_spots","vibrant_energy","fine_dining"],
     hotels: [{ name: "Hyatt Regency Tokyo", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 200, distinctions: ["Forbes 4-Star"] },{ name: "The Prince Gallery Kioicho", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 380, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"] },{ name: "Hilton Tokyo", chain: "Hilton", category: "Cat 30", pointsPerNight: 50000, cashPerNight: 250 }],
-    flights: [{ airline: "ANA", route: "JFK → NRT", cabin: "Economy", miles: 55000, cash: 900 },{ airline: "ANA", route: "JFK → NRT", cabin: "Business (The Room)", miles: 88000, cash: 5500 },{ airline: "United", route: "EWR → NRT", cabin: "Polaris Business", miles: 80000, cash: 4800 }]},
+    destinationAirports: ["NRT", "HND"] },
   { id: 6, name: "Maldives", country: "Maldives", region: "indian_ocean", image: "🐠", vibe: "popular", types: ["baecation", "beach", "wellness"], bestMonths: [11,12,1,2,3,4], budgetTier: "luxury", highlight: "Overwater villas & pristine reefs",
     tasteTags: ["water_sports","spa_days","luxury_splurge","romantic","sunrise_hike","chill_slow","boat_day","design_hotels"],
     hotels: [{ name: "Park Hyatt Hadahaa", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 900, distinctions: ["Michelin Key", "Forbes 5-Star"] },{ name: "Waldorf Astoria Maldives", chain: "Hilton", category: "Cat 60", pointsPerNight: 120000, cashPerNight: 1800, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"] },{ name: "St. Regis Vommuli", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 1500, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"] }],
-    flights: [{ airline: "Singapore Airlines", route: "JFK → MLE (via SIN)", cabin: "Economy", miles: 65000, cash: 950 },{ airline: "Turkish Airlines", route: "JFK → MLE (via IST)", cabin: "Business", miles: 90000, cash: 4500 },{ airline: "Singapore Airlines", route: "JFK → MLE (via SIN)", cabin: "Suites Class", miles: 120000, cash: 8000 }]},
+    destinationAirports: ["MLE"] },
   { id: 9, name: "Amalfi Coast", country: "Italy", region: "europe", image: "🍋", vibe: "popular", types: ["baecation", "girls_trip", "beach"], bestMonths: [5,6,7,8,9], budgetTier: "luxury", highlight: "Limoncello, cliffside towns & pasta",
     tasteTags: ["fine_dining","seafood","boat_day","photo_spots","romantic","walking_neighborhoods","luxury_splurge","natural_wine"],
     hotels: [{ name: "NH Grand Hotel Convento", chain: "Minor (NH)", category: "N/A", pointsPerNight: null, cashPerNight: 500, distinctions: ["Forbes 4-Star"] },{ name: "Monastero Santa Rosa", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 850, distinctions: ["Michelin Key", "LHW", "Forbes 5-Star"] },{ name: "Hotel Marina Riviera", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 350 }],
-    flights: [{ airline: "United", route: "EWR → NAP", cabin: "Economy", miles: 35000, cash: 550 },{ airline: "British Airways", route: "JFK → NAP (via LHR)", cabin: "Economy", miles: 26000, cash: 580 },{ airline: "United", route: "EWR → NAP", cabin: "Polaris Business", miles: 70000, cash: 3200 }]},
+    destinationAirports: ["NAP"] },
   { id: 11, name: "Turks & Caicos", country: "Turks & Caicos", region: "caribbean", image: "🐚", vibe: "popular", types: ["beach", "baecation", "family"], bestMonths: [11,12,1,2,3,4,5], budgetTier: "luxury", highlight: "Grace Bay Beach & crystal water",
     tasteTags: ["water_sports","beach_clubs","chill_slow","luxury_splurge","boat_day","spa_days","family_friendly"],
     hotels: [{ name: "Ritz-Carlton Turks & Caicos", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 950, distinctions: ["Forbes 5-Star", "FHR"] },{ name: "The Palms TCI", chain: "Hyatt (Leading Hotels)", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 700, distinctions: ["LHW", "Forbes 4-Star"] },{ name: "Wymara Resort", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 550 }],
-    flights: [{ airline: "JetBlue", route: "JFK → PLS", cabin: "Economy", miles: 14000, cash: 350 },{ airline: "American", route: "MIA → PLS", cabin: "Economy", miles: 15000, cash: 320 },{ airline: "JetBlue", route: "JFK → PLS", cabin: "Mint Business", miles: 36000, cash: 900 }]},
+    destinationAirports: ["PLS"] },
   { id: 13, name: "Santorini", country: "Greece", region: "europe", image: "🏛️", vibe: "popular", types: ["baecation", "girls_trip", "beach"], bestMonths: [5,6,9,10], budgetTier: "luxury", highlight: "Sunsets, caldera views & wine",
     tasteTags: ["photo_spots","romantic","fine_dining","natural_wine","sunrise_hike","walking_neighborhoods","architecture","luxury_splurge"],
     hotels: [{ name: "Canaves Oia Suites", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 650, distinctions: ["LHW", "Forbes 5-Star"] },{ name: "Mystique (Luxury Collection)", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 750, distinctions: ["LHW", "Forbes 4-Star", "FHR"] },{ name: "Costa Grand Resort", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 280 }],
-    flights: [{ airline: "United", route: "EWR → JTR (via ATH)", cabin: "Economy", miles: 40000, cash: 620 },{ airline: "Delta", route: "JFK → ATH", cabin: "Economy", miles: 42000, cash: 650 },{ airline: "United", route: "EWR → ATH", cabin: "Polaris Business", miles: 77000, cash: 3600 }]},
+    destinationAirports: ["JTR", "ATH"] },
   { id: 15, name: "Aspen", country: "USA", region: "north_america", image: "🏂", vibe: "popular", types: ["ski", "guys_trip", "girls_trip"], bestMonths: [12,1,2,3], budgetTier: "luxury", highlight: "Powder days & luxury lodge life",
     tasteTags: ["luxury_splurge","craft_cocktails","lounge_vibes","hiking","fine_dining"],
     hotels: [{ name: "St. Regis Aspen", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 900, distinctions: ["Forbes 5-Star", "FHR"] },{ name: "The Little Nell", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 1200, distinctions: ["Forbes 5-Star", "LHW"] },{ name: "Hyatt Residence Club", chain: "Hyatt", category: "Cat 6", pointsPerNight: 25000, cashPerNight: 450 }],
-    flights: [{ airline: "United", route: "EWR → ASE", cabin: "Economy", miles: 15000, cash: 350 },{ airline: "American", route: "DFW → ASE", cabin: "Economy", miles: 15000, cash: 380 },{ airline: "United", route: "EWR → ASE", cabin: "First Class", miles: 30000, cash: 680 }]},
+    destinationAirports: ["ASE"] },
   { id: 16, name: "Barcelona", country: "Spain", region: "europe", image: "🎨", vibe: "popular", types: ["city", "solo", "girls_trip", "baecation", "guys_trip", "family"], bestMonths: [4,5,6,9,10], budgetTier: "mid", highlight: "Gaudí, tapas & beach culture",
     tasteTags: ["street_food","architecture","art_galleries","beach_clubs","live_music","walking_neighborhoods","vibrant_energy","rooftop_bars","coffee_culture"],
     hotels: [{ name: "W Barcelona", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 380, distinctions: ["Forbes 4-Star"] },{ name: "Hyatt Regency Barcelona", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 200 },{ name: "Hilton Diagonal Mar", chain: "Hilton", category: "Cat 30", pointsPerNight: 50000, cashPerNight: 220 }],
-    flights: [{ airline: "United", route: "EWR → BCN", cabin: "Economy", miles: 30000, cash: 480 },{ airline: "Delta", route: "JFK → BCN", cabin: "Economy", miles: 34000, cash: 510 },{ airline: "Air France", route: "JFK → BCN (via CDG)", cabin: "Business", miles: 55000, cash: 2900 }]},
+    destinationAirports: ["BCN"] },
   { id: 27, name: "Thailand", country: "Thailand", region: "asia", image: "🛺", vibe: "popular", types: ["solo", "city", "adventure", "guys_trip", "beach"], bestMonths: [11,12,1,2,3], budgetTier: "budget", highlight: "Temples, street food, islands & legendary nightlife — all for less",
     tasteTags: ["street_food","rooftop_bars","temple_spiritual","beach_clubs","live_music","vibrant_energy","budget_backpack","local_markets","craft_cocktails","spa_days"],
     hotels: [{ name: "Park Hyatt Bangkok", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 350, distinctions: ["Forbes 5-Star"] },{ name: "Marriott Bangkok Surawongse", chain: "Marriott", category: "Cat 5", pointsPerNight: 35000, cashPerNight: 140 },{ name: "Hyatt Regency Koh Samui", chain: "Hyatt", category: "Cat 5", pointsPerNight: 21000, cashPerNight: 200 }],
-    flights: [{ airline: "ANA", route: "JFK → BKK (via NRT)", cabin: "Economy", miles: 40000, cash: 650 },{ airline: "Japan Airlines", route: "JFK → BKK (via NRT)", cabin: "Business", miles: 80000, cash: 4200 },{ airline: "EVA Air", route: "JFK → BKK (via TPE)", cabin: "Business (Royal Laurel)", miles: 65000, cash: 3600 }]},
+    destinationAirports: ["BKK"] },
   { id: 28, name: "Iceland", country: "Iceland", region: "europe", image: "🌋", vibe: "popular", types: ["adventure", "solo", "baecation"], bestMonths: [6,7,8,9,1,2,3], budgetTier: "mid", highlight: "Northern lights, glaciers, hot springs & volcanic landscapes",
     tasteTags: ["sunrise_hike","off_grid","photo_spots","natural_wine","spa_days","luxury_splurge","chill_slow"],
     hotels: [{ name: "The Retreat at Blue Lagoon", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 1200, distinctions: ["Forbes 5-Star"] },{ name: "Hilton Reykjavik Nordica", chain: "Hilton", category: "Cat 30", pointsPerNight: 50000, cashPerNight: 240 },{ name: "Marriott Edition Reykjavik", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 380 }],
-    flights: [{ airline: "Icelandair", route: "JFK → KEF", cabin: "Economy", miles: 20000, cash: 350 },{ airline: "Icelandair", route: "JFK → KEF", cabin: "Saga Business", miles: 50000, cash: 1800 },{ airline: "Delta", route: "JFK → KEF", cabin: "Economy", miles: 25000, cash: 380 }]},
+    destinationAirports: ["KEF"] },
   { id: 29, name: "Dubai", country: "UAE", region: "middle_east", image: "🌃", vibe: "popular", types: ["city", "family", "baecation", "guys_trip", "beach"], bestMonths: [10,11,12,1,2,3], budgetTier: "luxury", highlight: "Supertall skyline, desert safaris, beach clubs & tax-free shopping",
     tasteTags: ["fine_dining","rooftop_bars","beach_clubs","luxury_splurge","spa_days","photo_spots","design_hotels","vibrant_energy"],
     hotels: [{ name: "Park Hyatt Dubai", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Forbes 5-Star", "FHR"] },{ name: "W Dubai - The Palm", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 420, distinctions: ["Forbes 4-Star"] },{ name: "Hilton Dubai Palm Jumeirah", chain: "Hilton", category: "Cat 40", pointsPerNight: 60000, cashPerNight: 300 }],
-    flights: [{ airline: "Emirates", route: "JFK → DXB", cabin: "Economy", miles: 45000, cash: 650 },{ airline: "Emirates", route: "JFK → DXB", cabin: "Business", miles: 85000, cash: 4800 },{ airline: "JetBlue", route: "JFK → DXB (via LHR)", cabin: "Economy", miles: 35000, cash: 550 }]},
+    destinationAirports: ["DXB"] },
   { id: 30, name: "Cabo", country: "Mexico", region: "north_america", image: "🏖️", vibe: "popular", types: ["beach", "baecation", "guys_trip", "girls_trip", "family"], bestMonths: [10,11,12,1,2,3,4,5], budgetTier: "mid", highlight: "Pacific sunsets, sport fishing, tacos & pool-party energy",
     tasteTags: ["beach_clubs","craft_cocktails","fine_dining","rooftop_bars","spa_days","vibrant_energy","romantic","photo_spots"],
     hotels: [{ name: "Waldorf Astoria Los Cabos", chain: "Hilton", category: "Cat 60", pointsPerNight: 95000, cashPerNight: 700, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"] },{ name: "Hyatt Ziva Los Cabos", chain: "Hyatt", category: "Cat 5", pointsPerNight: 25000, cashPerNight: 350 },{ name: "Marriott Puerto Los Cabos", chain: "Marriott", category: "Cat 6", pointsPerNight: 50000, cashPerNight: 280 }],
-    flights: [{ airline: "Alaska Airlines", route: "LAX → SJD", cabin: "Economy", miles: 15000, cash: 250 },{ airline: "JetBlue", route: "JFK → SJD", cabin: "Economy", miles: 16000, cash: 320 },{ airline: "Delta", route: "JFK → SJD", cabin: "First", miles: 45000, cash: 1200 }]},
+    destinationAirports: ["SJD"] },
   { id: 7, name: "Cartagena", country: "Colombia", region: "south_america", image: "🌺", vibe: "hidden", types: ["baecation", "girls_trip", "beach", "city", "guys_trip"], bestMonths: [12,1,2,3,4], budgetTier: "budget", highlight: "Old City, salsa & Caribbean coast",
     tasteTags: ["street_food","craft_cocktails","rooftop_bars","live_music","walking_neighborhoods","photo_spots","vibrant_energy","beach_clubs","romantic"],
     hotels: [{ name: "Hyatt Regency Cartagena", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 190 },{ name: "Hotel Charleston Santa Teresa", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 220, distinctions: ["LHW"] }],
-    flights: [{ airline: "JetBlue", route: "JFK → CTG", cabin: "Economy", miles: 16000, cash: 340 },{ airline: "Avianca", route: "JFK → CTG (via BOG)", cabin: "Economy", miles: 20000, cash: 380 },{ airline: "JetBlue", route: "JFK → CTG", cabin: "Mint Business", miles: 40000, cash: 950 }]},
+    destinationAirports: ["CTG"] },
   { id: 8, name: "Banff", country: "Canada", region: "north_america", image: "🏔️", vibe: "hidden", types: ["adventure", "ski", "solo", "family"], bestMonths: [6,7,8,12,1,2], budgetTier: "mid", highlight: "Lake Louise & Rocky Mountain views",
     tasteTags: ["hiking","sunrise_hike","off_grid","photo_spots","chill_slow","spa_days"],
     hotels: [{ name: "Fairmont Banff Springs", chain: "Accor (Fairmont)", category: "N/A", pointsPerNight: null, cashPerNight: 400, distinctions: ["Forbes 4-Star"] },{ name: "Delta Banff Royal Canadian", chain: "Marriott (Delta)", category: "Cat 5", pointsPerNight: 35000, cashPerNight: 220 }],
-    flights: [{ airline: "United", route: "EWR → YYC", cabin: "Economy", miles: 15000, cash: 280 },{ airline: "American", route: "DFW → YYC", cabin: "Economy", miles: 15000, cash: 300 },{ airline: "United", route: "EWR → YYC", cabin: "Business", miles: 35000, cash: 750 }]},
+    destinationAirports: ["YYC"] },
   { id: 10, name: "Cape Town", country: "South Africa", region: "africa", image: "🦁", vibe: "hidden", types: ["adventure", "solo", "baecation", "guys_trip"], bestMonths: [10,11,12,1,2,3], budgetTier: "mid", highlight: "Table Mountain, wine & safaris",
     tasteTags: ["natural_wine","safari","hiking","surfing","street_food","art_galleries","rooftop_bars","vibrant_energy","farm_to_table"],
     hotels: [{ name: "Hyatt Regency Cape Town", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 180 },{ name: "One&Only Cape Town", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 650, distinctions: ["Michelin Key", "Forbes 5-Star", "LHW"] },{ name: "Marriott Crystal Towers", chain: "Marriott", category: "Cat 4", pointsPerNight: 30000, cashPerNight: 140 }],
-    flights: [{ airline: "Delta", route: "JFK → CPT (via ATL/JNB)", cabin: "Economy", miles: 50000, cash: 900 },{ airline: "Delta", route: "JFK → CPT", cabin: "Delta One Business", miles: 95000, cash: 5500 },{ airline: "Turkish Airlines", route: "JFK → CPT (via IST)", cabin: "Business", miles: 80000, cash: 3800 }]},
+    destinationAirports: ["CPT"] },
   { id: 12, name: "Medellín", country: "Colombia", region: "south_america", image: "🌸", vibe: "hidden", types: ["solo", "city", "adventure", "guys_trip"], bestMonths: [1,2,3,7,8,12], budgetTier: "budget", highlight: "Eternal spring, nightlife & culture",
     tasteTags: ["street_food","club_scene","coffee_culture","walking_neighborhoods","vibrant_energy","digital_nomad","budget_backpack","live_music"],
     hotels: [{ name: "The Charlee Hotel", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 160 },{ name: "Marriott Medellín", chain: "Marriott", category: "Cat 3", pointsPerNight: 20000, cashPerNight: 120 },{ name: "Element by Westin", chain: "Marriott", category: "Cat 3", pointsPerNight: 20000, cashPerNight: 100 }],
-    flights: [{ airline: "JetBlue", route: "JFK → MDE", cabin: "Economy", miles: 16000, cash: 320 },{ airline: "Avianca", route: "JFK → MDE (via BOG)", cabin: "Economy", miles: 18000, cash: 350 },{ airline: "JetBlue", route: "JFK → MDE", cabin: "Mint Business", miles: 38000, cash: 880 }]},
+    destinationAirports: ["MDE"] },
   { id: 14, name: "Costa Rica", country: "Costa Rica", region: "central_america", image: "🦜", vibe: "hidden", types: ["adventure", "solo", "family", "wellness"], bestMonths: [12,1,2,3,4], budgetTier: "budget", highlight: "Rainforests, volcanoes & zip lines",
     tasteTags: ["zip_line","surfing","yoga_retreat","hiking","off_grid","wildlife","farm_to_table","chill_slow","family_friendly"],
     hotels: [{ name: "Andaz Papagayo", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Forbes 4-Star", "FHR"] },{ name: "Marriott Hacienda Belén", chain: "Marriott", category: "Cat 4", pointsPerNight: 30000, cashPerNight: 150 }],
-    flights: [{ airline: "United", route: "EWR → SJO", cabin: "Economy", miles: 15000, cash: 320 },{ airline: "Southwest", route: "FLL → SJO", cabin: "Wanna Get Away", miles: 14000, cash: 280 },{ airline: "United", route: "EWR → SJO", cabin: "Business", miles: 35000, cash: 800 }]},
+    destinationAirports: ["SJO"] },
   { id: 17, name: "Oman", country: "Oman", region: "middle_east", image: "🕌", vibe: "hidden", types: ["adventure", "solo", "baecation"], bestMonths: [10,11,12,1,2,3], budgetTier: "mid", highlight: "Dramatic wadis, desert camps & souks",
     tasteTags: ["historic_ruins","off_grid","architecture","sunrise_hike","luxury_splurge","spa_days","temple_spiritual"],
     hotels: [{ name: "Al Bustan Palace (Ritz)", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 450, distinctions: ["Forbes 5-Star", "FHR"] },{ name: "Alila Jabal Akhdar", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Michelin Key", "Forbes 4-Star"] },{ name: "Hyatt Regency Muscat", chain: "Hyatt", category: "Cat 3", pointsPerNight: 12000, cashPerNight: 140 }],
-    flights: [{ airline: "Turkish Airlines", route: "JFK → MCT (via IST)", cabin: "Economy", miles: 40000, cash: 650 },{ airline: "Turkish Airlines", route: "JFK → MCT (via IST)", cabin: "Business", miles: 75000, cash: 3400 }]},
+    destinationAirports: ["MCT"] },
   { id: 18, name: "Oaxaca", country: "Mexico", region: "north_america", image: "🌮", vibe: "hidden", types: ["solo", "adventure", "city", "wellness"], bestMonths: [10,11,12,1,2,3], budgetTier: "budget", highlight: "Mezcal, mole & indigenous culture",
     tasteTags: ["street_food","mezcal_tequila","cooking_class","local_markets","art_galleries","walking_neighborhoods","food_tours","budget_backpack"],
     hotels: [{ name: "Hotel Sin Nombre", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 180, distinctions: ["Condé Nast Hot List"] },{ name: "Quinta Real Oaxaca", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 200 }],
-    flights: [{ airline: "United", route: "EWR → OAX (via IAH)", cabin: "Economy", miles: 17500, cash: 350 },{ airline: "American", route: "DFW → OAX", cabin: "Economy", miles: 15000, cash: 320 }]},
+    destinationAirports: ["OAX"] },
   { id: 19, name: "Tasmania", country: "Australia", region: "oceania", image: "🌿", vibe: "hidden", types: ["adventure", "solo", "wellness"], bestMonths: [12,1,2,3], budgetTier: "mid", highlight: "MONA, wild coastlines & farm-to-table",
     tasteTags: ["farm_to_table","hiking","natural_wine","off_grid","art_galleries","chill_slow","seafood"],
     hotels: [{ name: "Saffire Freycinet", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 700, distinctions: ["LHW", "Forbes 5-Star"] },{ name: "MACq 01 Hotel Hobart", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 220 }],
-    flights: [{ airline: "United", route: "SFO → HBA (via SYD)", cabin: "Economy", miles: 55000, cash: 1100 },{ airline: "ANA", route: "JFK → SYD (via NRT)", cabin: "Business (The Room)", miles: 105000, cash: 6500 }]},
+    destinationAirports: ["HBA"] },
   { id: 20, name: "Montenegro", country: "Montenegro", region: "europe", image: "⛰️", vibe: "hidden", types: ["baecation", "adventure", "beach", "city", "guys_trip"], bestMonths: [5,6,7,8,9], budgetTier: "budget", highlight: "Bay of Kotor & Adriatic coast gems",
     tasteTags: ["boat_day","walking_neighborhoods","seafood","photo_spots","budget_backpack","architecture","beach_clubs","romantic"],
     hotels: [{ name: "Regent Porto Montenegro", chain: "IHG", category: "Cat 5", pointsPerNight: 40000, cashPerNight: 350, distinctions: ["Forbes 4-Star"] },{ name: "One&Only Portonovi", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 600, distinctions: ["Michelin Key", "Forbes 5-Star", "LHW"] }],
-    flights: [{ airline: "Turkish Airlines", route: "JFK → TGD (via IST)", cabin: "Economy", miles: 35000, cash: 500 },{ airline: "Turkish Airlines", route: "JFK → TGD (via IST)", cabin: "Business", miles: 70000, cash: 2800 }]},
+    destinationAirports: ["TGD"] },
   { id: 21, name: "Luang Prabang", country: "Laos", region: "asia", image: "🏯", vibe: "hidden", types: ["solo", "adventure", "wellness"], bestMonths: [10,11,12,1,2,3], budgetTier: "budget", highlight: "Monk processions, waterfalls & night markets",
     tasteTags: ["temple_spiritual","street_food","chill_slow","off_grid","local_markets","sunrise_hike","budget_backpack","walking_neighborhoods"],
     hotels: [{ name: "Sofitel Luang Prabang", chain: "Accor", category: "N/A", pointsPerNight: null, cashPerNight: 250 },{ name: "Villa Maly Boutique", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 90 }],
-    flights: [{ airline: "Singapore Airlines", route: "JFK → LPQ (via SIN/BKK)", cabin: "Economy", miles: 65000, cash: 850 },{ airline: "ANA", route: "JFK → LPQ (via NRT/BKK)", cabin: "Business (The Room)", miles: 95000, cash: 4500 }]},
+    destinationAirports: ["LPQ"] },
   { id: 22, name: "Puglia", country: "Italy", region: "europe", image: "🫒", vibe: "hidden", types: ["baecation", "girls_trip", "beach", "family"], bestMonths: [5,6,7,8,9,10], budgetTier: "mid", highlight: "Trulli houses, olive groves & Adriatic beaches without the Amalfi crowds",
     tasteTags: ["farm_to_table","natural_wine","walking_neighborhoods","photo_spots","chill_slow","romantic","local_markets","architecture"],
     hotels: [{ name: "Masseria Torre Maizza", chain: "Marriott (Luxury Collection)", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 550, distinctions: ["Michelin Key", "Forbes 5-Star", "LHW"] },{ name: "Borgo Egnazia", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 700, distinctions: ["Forbes 5-Star", "LHW"] },{ name: "Hilton Garden Inn Lecce", chain: "Hilton", category: "Cat 20", pointsPerNight: 40000, cashPerNight: 140 }],
-    flights: [{ airline: "ITA Airways", route: "JFK → BRI (via FCO)", cabin: "Economy", miles: 30000, cash: 550 },{ airline: "Emirates", route: "JFK → BRI (via MXP)", cabin: "Business", miles: 72500, cash: 3800 }]},
+    destinationAirports: ["BRI"] },
   { id: 23, name: "Marrakech", country: "Morocco", region: "africa", image: "🕌", vibe: "hidden", types: ["girls_trip", "baecation", "city", "wellness"], bestMonths: [3,4,5,10,11], budgetTier: "mid", highlight: "Riads, souks, hammams & rooftop dining in the medina",
     tasteTags: ["local_markets","spa_days","rooftop_bars","street_food","photo_spots","design_hotels","walking_neighborhoods","romantic"],
     hotels: [{ name: "Royal Mansour", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 1100, distinctions: ["Michelin Key", "Forbes 5-Star", "LHW"] },{ name: "Four Seasons Marrakech", chain: "Independent (Amex FHR)", category: "FHR", pointsPerNight: null, cashPerNight: 650, distinctions: ["Forbes 5-Star", "FHR"] },{ name: "Hyatt Regency Casablanca", chain: "Hyatt", category: "Cat 3", pointsPerNight: 12000, cashPerNight: 110 }],
-    flights: [{ airline: "Royal Air Maroc", route: "JFK → RAK (via CMN)", cabin: "Economy", miles: 35000, cash: 500 },{ airline: "Air France", route: "JFK → RAK (via CDG)", cabin: "Business", miles: 70000, cash: 3200 }]},
+    destinationAirports: ["RAK"] },
   { id: 24, name: "Namibia", country: "Namibia", region: "africa", image: "🦓", vibe: "hidden", types: ["adventure", "solo", "baecation"], bestMonths: [5,6,7,8,9,10], budgetTier: "luxury", highlight: "Sossusvlei dunes, skeleton coast & stargazing safaris",
     tasteTags: ["off_grid","sunrise_hike","photo_spots","chill_slow","luxury_splurge","safari"],
     hotels: [{ name: "Zannier Sonop", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 1400, distinctions: ["Condé Nast Hot List"] },{ name: "Hilton Windhoek", chain: "Hilton", category: "Cat 20", pointsPerNight: 30000, cashPerNight: 120 },{ name: "&Beyond Sossusvlei Desert Lodge", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 950, distinctions: ["Forbes 4-Star"] }],
-    flights: [{ airline: "South African Airways", route: "JFK → WDH (via JNB)", cabin: "Economy", miles: 55000, cash: 900 },{ airline: "Qatar Airways", route: "JFK → WDH (via DOH/JNB)", cabin: "Business (Qsuite)", miles: 85000, cash: 5200 }]},
+    destinationAirports: ["WDH"] },
   { id: 25, name: "Niseko", country: "Japan", region: "asia", image: "🎿", vibe: "hidden", types: ["ski", "adventure", "guys_trip", "family"], bestMonths: [12,1,2,3], budgetTier: "luxury", highlight: "Japan's powder paradise — world-class skiing, onsens & izakayas",
     tasteTags: ["street_food","fine_dining","spa_days","off_grid","luxury_splurge","craft_cocktails"],
     hotels: [{ name: "Park Hyatt Niseko Hanazono", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 800, distinctions: ["Forbes 5-Star"] },{ name: "Higashiyama Niseko Village (Ritz)", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 650, distinctions: ["Forbes 4-Star"] },{ name: "Hilton Niseko Village", chain: "Hilton", category: "Cat 40", pointsPerNight: 60000, cashPerNight: 350 }],
-    flights: [{ airline: "ANA", route: "JFK → CTS (via NRT)", cabin: "Economy", miles: 40000, cash: 700 },{ airline: "JAL", route: "JFK → CTS (via NRT)", cabin: "Business", miles: 80000, cash: 4500 }]},
+    destinationAirports: ["CTS"] },
   { id: 26, name: "Comporta", country: "Portugal", region: "europe", image: "🌾", vibe: "hidden", types: ["beach", "baecation", "wellness", "girls_trip"], bestMonths: [5,6,7,8,9], budgetTier: "luxury", highlight: "Portugal's barefoot-luxury coast — rice paddies, wild beaches & seafood shacks",
     tasteTags: ["beach_clubs","natural_wine","farm_to_table","chill_slow","design_hotels","romantic","coffee_culture","photo_spots"],
     hotels: [{ name: "Sublime Comporta", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 500, distinctions: ["LHW", "Forbes 4-Star"] },{ name: "Pestana Comporta", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 350 },{ name: "Hyatt Regency Lisboa", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 220 }],
-    flights: [{ airline: "TAP Portugal", route: "JFK → LIS", cabin: "Economy", miles: 30000, cash: 450 },{ airline: "United", route: "EWR → LIS", cabin: "Polaris Business", miles: 60000, cash: 3200 }]},
+    destinationAirports: ["LIS"] },
 ];
 
 // ============ ICONS ============
@@ -451,10 +602,90 @@ function getBestHotelPoints(dest) {
   if (!r.length) return null;
   return r.reduce((b, h) => (!b || h.pointsPerNight < b.pointsPerNight) ? h : b, null);
 }
-function getBestFlightMiles(dest) {
-  if (!dest.flights?.length) return null;
-  const econ = dest.flights.filter(f => f.cabin.toLowerCase().includes("economy") || f.cabin.toLowerCase().includes("wanna"));
-  return (econ.length > 0 ? econ : dest.flights).reduce((b, f) => (!b || f.miles < b.miles) ? f : b, null);
+function getBestFlightMiles(flights) {
+  if (!flights?.length) return null;
+  const econ = flights.filter(f => f.cabin.toLowerCase().includes("economy") || f.cabin.toLowerCase().includes("wanna"));
+  return (econ.length > 0 ? econ : flights).reduce((b, f) => (!b || f.miles < b.miles) ? f : b, null);
+}
+
+// Generate dynamic flight options based on user's home airport and destination
+function generateFlightOptions(homeAirport, dest) {
+  if (!homeAirport || !dest.destinationAirports?.length) return [];
+
+  const region = dest.region;
+  const isDomestic = region === "north_america";
+  const origin = isDomestic ? homeAirport.airports[0] : homeAirport.primaryIntl;
+  const destAirport = dest.destinationAirports[0];
+  const tier = REGION_TO_TIER[region] || "transatlantic";
+  const routes = AIRLINE_ROUTES[tier];
+  if (!routes) return [];
+
+  // Build route string: "ORD → NRT" or "ORD → DPS (via NRT)" for connecting
+  const buildRoute = (airline) => {
+    const hubs = AIRLINE_HUBS[airline] || [];
+    const connectHub = AIRLINE_CONNECT_HUBS[airline];
+    const isDirect = hubs.includes(origin) || isDomestic;
+    if (isDirect || !connectHub) return `${origin} → ${destAirport}`;
+    return `${origin} → ${destAirport} (via ${connectHub})`;
+  };
+
+  const flights = [];
+  const seen = new Set();
+
+  // Add 2 economy + 1-2 business options from different airlines
+  let econCount = 0;
+  let bizCount = 0;
+  for (const r of routes) {
+    const econKey = `${r.airline}-econ`;
+    const bizKey = `${r.airline}-biz`;
+    if (econCount < 2 && !seen.has(econKey)) {
+      const route = buildRoute(r.airline);
+      const cabin = r.econCabin || "Economy";
+      // Slight variation: ±10% randomized per airline for realism
+      const jitter = 1 + ((r.airline.length % 5) - 2) * 0.03;
+      const tierData = DISTANCE_TIERS[tier];
+      flights.push({
+        airline: r.airline,
+        route,
+        cabin,
+        miles: r.econMiles || Math.round(tierData.economy * jitter / 500) * 500,
+        cash: Math.round((tierData.cash_econ * jitter) / 10) * 10,
+      });
+      seen.add(econKey);
+      econCount++;
+    }
+    if (bizCount < 2 && r.bizMiles && r.bizCabin && !seen.has(bizKey)) {
+      const route = buildRoute(r.airline);
+      const tierData = DISTANCE_TIERS[tier];
+      const jitter = 1 + ((r.airline.length % 3) - 1) * 0.04;
+      flights.push({
+        airline: r.airline,
+        route,
+        cabin: r.bizCabin,
+        miles: r.bizMiles || Math.round(tierData.business * jitter / 1000) * 1000,
+        cash: Math.round((tierData.cash_biz * jitter) / 50) * 50,
+      });
+      seen.add(bizKey);
+      bizCount++;
+    }
+    if (econCount >= 2 && bizCount >= 2) break;
+  }
+
+  // Ensure at least 1 business option if we have any routes
+  if (bizCount === 0 && routes.length > 0) {
+    const r = routes.find(r2 => r2.bizMiles && r2.bizCabin);
+    if (r) {
+      flights.push({
+        airline: r.airline,
+        route: buildRoute(r.airline),
+        cabin: r.bizCabin,
+        miles: r.bizMiles,
+        cash: DISTANCE_TIERS[tier]?.cash_biz || 2000,
+      });
+    }
+  }
+
+  return flights;
 }
 
 // ============ MAIN APP ============
@@ -467,6 +698,7 @@ export default function TravelConcierge() {
   const [budgetPref, setBudgetPref] = useState("any");
   const [vibePref, setVibePref] = useState("mix");
   const [regionPrefs, setRegionPrefs] = useState([]);
+  const [homeAirport, setHomeAirport] = useState(null);
   const [showAddCard, setShowAddCard] = useState(false);
   const [showAddLoyalty, setShowAddLoyalty] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(true);
@@ -492,6 +724,12 @@ export default function TravelConcierge() {
     return Object.entries(counts).sort((a,b) => b[1] - a[1]).map(([id, count]) => ({ id, count, tag: ALL_TASTE_TAGS.find(t=>t.id===id) })).filter(x=>x.tag);
   })();
 
+  // Generate flight options dynamically from user's home airport
+  const getFlights = useCallback((dest) => {
+    if (!homeAirport) return [];
+    return generateFlightOptions(homeAirport, dest);
+  }, [homeAirport]);
+
   const getRecommendations = useCallback(() => {
     return DESTINATIONS.map(dest => {
       let score = 0;
@@ -503,7 +741,7 @@ export default function TravelConcierge() {
       if (vibePref === "hidden" && dest.vibe === "popular") score -= 20;
       if (vibePref === "mix") score += 5;
       if (regionPrefs.length > 0) { if (regionPrefs.includes(dest.region)) score += 25; else score -= 10; }
-      const bh = getBestHotelPoints(dest); const bf = getBestFlightMiles(dest);
+      const bh = getBestHotelPoints(dest); const bf = getBestFlightMiles(getFlights(dest));
       const needed = (bh ? bh.pointsPerNight*4 : 100000) + (bf ? bf.miles : 50000);
       if (totalPoints >= needed) score += 25; else if (totalPoints >= needed*0.6) score += 10;
       tripHistory.forEach(trip => { const cr = trip.ratings ? Object.values(trip.ratings).reduce((a,b)=>a+b,0)/RATING_CATEGORIES.length : (trip.rating||0); if (cr >= 4) { const pd = DESTINATIONS.find(d => d.name === trip.destination); if (pd) score += dest.types.filter(t => pd.types.includes(t)).length * cr * 3; }});
@@ -527,7 +765,7 @@ export default function TravelConcierge() {
       }
       return { ...dest, score, tasteMatch };
     }).sort((a,b) => b.score - a.score);
-  }, [preferences, budgetPref, vibePref, regionPrefs, totalPoints, tripHistory, tasteProfile]);
+  }, [preferences, budgetPref, vibePref, regionPrefs, totalPoints, tripHistory, tasteProfile, getFlights]);
 
   const recommendations = getRecommendations();
   const handleSurpriseMe = () => { const top = recommendations.slice(0,5); setSurpriseResult(top[Math.floor(Math.random()*top.length)]); };
@@ -560,32 +798,46 @@ export default function TravelConcierge() {
           )}
           {onboardingStep === 1 && (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 1 OF 4</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 1 OF 5</p>
+              <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>Where do you fly from?</h2>
+              <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 24, fontWeight: 300 }}>Select your home city so we can show you the best routes.</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 32, maxHeight: 320, overflowY: "auto", padding: "4px 0" }}>
+                {US_METRO_AREAS.map(m => <SelectPill key={m.city} icon="✈️" label={m.city} desc={m.airports.join(", ")} color="var(--sky)" active={homeAirport?.city === m.city} onClick={() => setHomeAirport(m)} />)}
+              </div>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                <Button variant="secondary" onClick={() => setOnboardingStep(0)}>Back</Button>
+                <Button onClick={() => setOnboardingStep(2)} disabled={!homeAirport}>Continue</Button>
+              </div>
+            </div>
+          )}
+          {onboardingStep === 2 && (
+            <div className="fade-up">
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 2 OF 5</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>What kind of traveler are you?</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 28, fontWeight: 300 }}>Select all that apply.</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 32 }}>
                 {TRIP_TYPES.map(t => <SelectPill key={t.id} icon={t.icon} label={t.label} color={t.color} active={preferences.includes(t.id)} onClick={() => setPreferences(p => p.includes(t.id) ? p.filter(x => x !== t.id) : [...p, t.id])} />)}
               </div>
               <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-                <Button variant="secondary" onClick={() => setOnboardingStep(0)}>Back</Button>
-                <Button onClick={() => setOnboardingStep(2)} disabled={!preferences.length}>Continue</Button>
+                <Button variant="secondary" onClick={() => setOnboardingStep(1)}>Back</Button>
+                <Button onClick={() => setOnboardingStep(3)} disabled={!preferences.length}>Continue</Button>
               </div>
             </div>
           )}
-          {onboardingStep === 2 && (
+          {onboardingStep === 3 && (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 2 OF 4</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 3 OF 5</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>What's your ideal budget?</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 24, fontWeight: 300 }}>Per-night hotel range.</p>
               <div style={{ display: "grid", gap: 8, maxWidth: 400, margin: "0 auto 28px" }}>
                 {BUDGET_OPTIONS.map(o => <SelectPill key={o.id} icon={o.icon} label={o.label} desc={o.desc} color={o.color} active={budgetPref === o.id} onClick={() => setBudgetPref(o.id)} />)}
               </div>
-              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}><Button variant="secondary" onClick={() => setOnboardingStep(1)}>Back</Button><Button onClick={() => setOnboardingStep(3)}>Continue</Button></div>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}><Button variant="secondary" onClick={() => setOnboardingStep(2)}>Back</Button><Button onClick={() => setOnboardingStep(4)}>Continue</Button></div>
             </div>
           )}
-          {onboardingStep === 3 && (
+          {onboardingStep === 4 && (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 3 OF 4</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 4 OF 5</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>Popular hotspots or hidden gems?</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 24, fontWeight: 300 }}>We'll tailor recommendations to your vibe.</p>
               <div style={{ display: "grid", gap: 8, maxWidth: 420, margin: "0 auto 28px" }}>
@@ -596,12 +848,12 @@ export default function TravelConcierge() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 7, justifyContent: "center", marginBottom: 28 }}>
                 {REGIONS.map(r => <SelectPill key={r.id} icon={r.icon} label={r.label} color="#8B9E7E" active={regionPrefs.includes(r.id)} onClick={() => setRegionPrefs(p => p.includes(r.id) ? p.filter(x => x !== r.id) : [...p, r.id])} />)}
               </div>
-              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}><Button variant="secondary" onClick={() => setOnboardingStep(2)}>Back</Button><Button onClick={() => setOnboardingStep(4)}>Continue</Button></div>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}><Button variant="secondary" onClick={() => setOnboardingStep(3)}>Back</Button><Button onClick={() => setOnboardingStep(5)}>Continue</Button></div>
             </div>
           )}
-          {onboardingStep === 4 && (
+          {onboardingStep === 5 && (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 4 OF 4</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 5 OF 5</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>Add your points & cards</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 24, fontWeight: 300 }}>You can always add more later.</p>
               {[...userCards.map((c,i) => { const info = CREDIT_CARDS.find(x=>x.id===c.id); return <div key={`c${i}`} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", background: "var(--card-bg)", borderRadius: 10, marginBottom: 6, border: "1px solid var(--border)" }}><div style={{ display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 32, height: 20, borderRadius: 4, background: info?.color }} /><span style={{ fontSize: 12, fontWeight: 500 }}>{info?.name}</span></div><span style={{ color: "var(--sage-dark)", fontWeight: 600, fontSize: 12 }}>{c.points?.toLocaleString()} pts</span></div>; }),
@@ -612,7 +864,7 @@ export default function TravelConcierge() {
                 <Button variant="secondary" onClick={() => setShowAddLoyalty(true)} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12 }}>{I.plus} Loyalty Program</Button>
               </div>
               <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-                <Button variant="secondary" onClick={() => setOnboardingStep(3)}>Back</Button>
+                <Button variant="secondary" onClick={() => setOnboardingStep(4)}>Back</Button>
                 <Button onClick={() => setShowOnboarding(false)} style={{ padding: "12px 36px" }}>{(userCards.length+userLoyalty.length) > 0 ? "Let's Go" : "Skip for Now"}</Button>
               </div>
             </div>
@@ -644,29 +896,29 @@ export default function TravelConcierge() {
         ))}
       </nav>
       <main style={{ padding: "28px", maxWidth: 1100, margin: "0 auto" }}>
-        {activeTab === "dashboard" && <DashboardView {...{userCards,userLoyalty,totalPoints,recommendations,preferences,tripHistory,goals,tasteProfile,inspoBoard}} onExplore={()=>setActiveTab("explore")} onSelectDest={setSelectedDest} onGoals={()=>setActiveTab("goals")} onInspo={()=>setActiveTab("inspo")} onEditProfile={()=>{setOnboardingStep(1);setShowOnboarding(true);}} />}
+        {activeTab === "dashboard" && <DashboardView {...{userCards,userLoyalty,totalPoints,recommendations,preferences,tripHistory,goals,tasteProfile,inspoBoard,getFlights}} onExplore={()=>setActiveTab("explore")} onSelectDest={setSelectedDest} onGoals={()=>setActiveTab("goals")} onInspo={()=>setActiveTab("inspo")} onEditProfile={()=>{setOnboardingStep(1);setShowOnboarding(true);}} />}
         {activeTab === "inspo" && <InspoView {...{inspoBoard,setInspoBoard,tasteProfile}} />}
         {activeTab === "wallet" && <WalletView {...{userCards,setUserCards,userLoyalty,setUserLoyalty}} onAddCard={()=>setShowAddCard(true)} onAddLoyalty={()=>setShowAddLoyalty(true)} />}
-        {activeTab === "explore" && <ExploreView {...{recommendations,totalPoints,compareList,setCompareList}} onSelectDest={setSelectedDest} onCompare={()=>setShowCompare(true)} />}
-        {activeTab === "planner" && <PlannerView {...{plannedTrips,setPlannedTrips,userCards,userLoyalty,totalPoints}} />}
+        {activeTab === "explore" && <ExploreView {...{recommendations,totalPoints,compareList,setCompareList,getFlights}} onSelectDest={setSelectedDest} onCompare={()=>setShowCompare(true)} />}
+        {activeTab === "planner" && <PlannerView {...{plannedTrips,setPlannedTrips,userCards,userLoyalty,totalPoints,getFlights}} />}
         {activeTab === "trips" && <TripsView {...{tripHistory,setTripHistory}} onAddTrip={()=>setShowTripModal(true)} onRecap={setRecapTrip} />}
-        {activeTab === "goals" && <GoalsView {...{goals,setGoals,userCards,userLoyalty,totalPoints}} />}
-        {activeTab === "surprise" && <SurpriseView result={surpriseResult} onSurprise={handleSurpriseMe} totalPoints={totalPoints} hasWallet={(userCards.length+userLoyalty.length)>0} onPlaybook={d=>setPlaybookDest(d)} />}
+        {activeTab === "goals" && <GoalsView {...{goals,setGoals,userCards,userLoyalty,totalPoints,getFlights}} />}
+        {activeTab === "surprise" && <SurpriseView result={surpriseResult} onSurprise={handleSurpriseMe} totalPoints={totalPoints} hasWallet={(userCards.length+userLoyalty.length)>0} onPlaybook={d=>setPlaybookDest(d)} getFlights={getFlights} />}
       </main>
       <AddCardModal isOpen={showAddCard} onClose={()=>setShowAddCard(false)} userCards={userCards} onAdd={c=>{setUserCards([...userCards,c]);setShowAddCard(false);}} />
       <AddLoyaltyModal isOpen={showAddLoyalty} onClose={()=>setShowAddLoyalty(false)} userLoyalty={userLoyalty} onAdd={l=>{setUserLoyalty([...userLoyalty,l]);setShowAddLoyalty(false);}} />
-      <DestinationModal dest={selectedDest} onClose={()=>setSelectedDest(null)} totalPoints={totalPoints} userCards={userCards} userLoyalty={userLoyalty} onPlaybook={d=>{setSelectedDest(null);setPlaybookDest(d);}} />
-      <PlaybookModal dest={playbookDest} onClose={()=>setPlaybookDest(null)} userCards={userCards} userLoyalty={userLoyalty} totalPoints={totalPoints} />
+      <DestinationModal dest={selectedDest} onClose={()=>setSelectedDest(null)} totalPoints={totalPoints} userCards={userCards} userLoyalty={userLoyalty} onPlaybook={d=>{setSelectedDest(null);setPlaybookDest(d);}} getFlights={getFlights} />
+      <PlaybookModal dest={playbookDest} onClose={()=>setPlaybookDest(null)} userCards={userCards} userLoyalty={userLoyalty} totalPoints={totalPoints} getFlights={getFlights} />
       <AddTripModal isOpen={showTripModal} onClose={()=>setShowTripModal(false)} trip={newTrip} setTrip={setNewTrip} onSave={()=>{const hr=newTrip.ratings&&Object.values(newTrip.ratings).some(v=>v>0);if(newTrip.destination&&hr){setTripHistory([...tripHistory,{...newTrip,id:Date.now()}]);setNewTrip({destination:"",type:"",ratings:{food:0,nightlife:0,activities:0,value:0,culture:0},notes:"",date:"",hotel:"",flight:"",pointsSpent:"",cashSaved:"",highlights:""});setShowTripModal(false);}}} />
-      <CompareModal isOpen={showCompare} onClose={()=>setShowCompare(false)} destinations={compareList.map(id=>DESTINATIONS.find(d=>d.id===id)).filter(Boolean)} totalPoints={totalPoints} onClear={()=>setCompareList([])} />
+      <CompareModal isOpen={showCompare} onClose={()=>setShowCompare(false)} destinations={compareList.map(id=>DESTINATIONS.find(d=>d.id===id)).filter(Boolean)} totalPoints={totalPoints} onClear={()=>setCompareList([])} getFlights={getFlights} />
       <RecapModal trip={recapTrip} onClose={()=>setRecapTrip(null)} />
     </div>
   );
 }
 
 // ============ DESTINATION CARD ============
-function DestinationCard({ dest, onClick, index=0, totalPoints }) {
-  const bh = getBestHotelPoints(dest); const bf = getBestFlightMiles(dest);
+function DestinationCard({ dest, onClick, index=0, totalPoints, flights }) {
+  const bh = getBestHotelPoints(dest); const bf = getBestFlightMiles(flights);
   const needed = (bh?bh.pointsPerNight*4:999999)+(bf?bf.miles:999999);
   const affordable = totalPoints >= needed;
   const budgetColors = { budget: "#8B9E7E", mid: "#B8965A", luxury: "#C4715B" };
@@ -701,13 +953,13 @@ function DestinationCard({ dest, onClick, index=0, totalPoints }) {
 }
 
 // ============ VIEWS ============
-function DashboardView({ userCards, userLoyalty, totalPoints, recommendations, preferences, onExplore, onSelectDest, tripHistory, goals, onGoals, tasteProfile, inspoBoard, onInspo, onEditProfile }) {
+function DashboardView({ userCards, userLoyalty, totalPoints, recommendations, preferences, onExplore, onSelectDest, tripHistory, goals, onGoals, tasteProfile, inspoBoard, onInspo, onEditProfile, getFlights }) {
   // Generate smart alerts
   const month = new Date().getMonth()+1;
   const alerts = [];
   recommendations.slice(0,8).forEach(d => {
     if (d.bestMonths.includes(month) || d.bestMonths.includes(month+1>12?1:month+1)) {
-      const bh = getBestHotelPoints(d); const bf = getBestFlightMiles(d);
+      const bh = getBestHotelPoints(d); const bf = getBestFlightMiles(getFlights(d));
       const needed = (bh?bh.pointsPerNight*4:0)+(bf?bf.miles:0);
       if (needed > 0 && totalPoints >= needed) alerts.push({ type: "book", icon: "🎯", color: "var(--sage-dark)", title: `Book ${d.name} now`, desc: `Peak season coming up. You have enough points (${needed.toLocaleString()} needed).`, dest: d });
       else if (d.bestMonths.includes(month+2>12?month-10:month+2) || d.bestMonths.includes(month+3>12?month-9:month+3)) alerts.push({ type: "plan", icon: "📅", color: "var(--warm-gold)", title: `Start planning ${d.name}`, desc: `Best months are ${d.bestMonths.slice(0,3).map(m=>new Date(2024,m-1).toLocaleString('default',{month:'short'})).join(", ")}. Book 2–3 months ahead for best award availability.`, dest: d });
@@ -822,7 +1074,7 @@ function DashboardView({ userCards, userLoyalty, totalPoints, recommendations, p
           <Button variant="ghost" onClick={onExplore} style={{ fontSize: 12, color: "var(--sage)" }}>View All →</Button>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(275px, 1fr))", gap: 14 }}>
-          {recommendations.slice(0,4).map((d,i) => <DestinationCard key={d.id} dest={d} onClick={()=>onSelectDest(d)} index={i} totalPoints={totalPoints} />)}
+          {recommendations.slice(0,4).map((d,i) => <DestinationCard key={d.id} dest={d} onClick={()=>onSelectDest(d)} index={i} totalPoints={totalPoints} flights={getFlights(d)} />)}
         </div>
       </div>
       {(userCards.length+userLoyalty.length)>0 && (
@@ -939,7 +1191,7 @@ function WalletView({ userCards, setUserCards, userLoyalty, setUserLoyalty, onAd
   );
 }
 
-function ExploreView({ recommendations, totalPoints, onSelectDest, compareList, setCompareList, onCompare }) {
+function ExploreView({ recommendations, totalPoints, onSelectDest, compareList, setCompareList, onCompare, getFlights }) {
   const [tf, setTf] = useState("all"); const [vf, setVf] = useState("all");
   let filtered = recommendations;
   if (tf !== "all") filtered = filtered.filter(d => d.types.includes(tf));
@@ -965,7 +1217,7 @@ function ExploreView({ recommendations, totalPoints, onSelectDest, compareList, 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(275px, 1fr))", gap: 14 }}>
         {filtered.map((d,i) => (
           <div key={d.id} style={{ position: "relative" }}>
-            <DestinationCard dest={d} onClick={()=>onSelectDest(d)} index={i} totalPoints={totalPoints} />
+            <DestinationCard dest={d} onClick={()=>onSelectDest(d)} index={i} totalPoints={totalPoints} flights={getFlights(d)} />
             <button onClick={(e)=>{e.stopPropagation();toggleCompare(d.id);}} style={{
               position: "absolute", bottom: 14, right: 14, width: 30, height: 30, borderRadius: "50%",
               border: `1.5px solid ${compareList.includes(d.id)?"var(--sage)":"var(--border-strong)"}`,
@@ -1039,7 +1291,7 @@ function TripsView({ tripHistory, setTripHistory, onAddTrip, onRecap }) {
   );
 }
 
-function SurpriseView({ result, onSurprise, totalPoints, hasWallet, onPlaybook }) {
+function SurpriseView({ result, onSurprise, totalPoints, hasWallet, onPlaybook, getFlights }) {
   return (
     <div style={{ textAlign: "center" }}>
       <div className="fade-up" style={{ marginBottom: 36, paddingTop: 16 }}>
@@ -1057,7 +1309,7 @@ function SurpriseView({ result, onSurprise, totalPoints, hasWallet, onPlaybook }
             <Badge color={result.vibe==="hidden"?"var(--sage)":"var(--terracotta)"}>{result.vibe==="hidden"?"🗺️ Hidden Gem":"🔥 Popular"}</Badge>
           </div>
           <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 16, lineHeight: 1.6, textAlign: "center", fontWeight: 300 }}>{result.highlight}</p>
-          <HotelFlightBlock dest={result} totalPoints={totalPoints} />
+          <HotelFlightBlock dest={result} totalPoints={totalPoints} flights={getFlights(result)} />
           <div style={{ textAlign: "center", marginTop: 16, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             {hasWallet && <Button onClick={()=>onPlaybook?.(result)}>📋 Booking Playbook</Button>}
             <Button onClick={onSurprise} variant="secondary">↻ Try Another</Button>
@@ -1069,7 +1321,7 @@ function SurpriseView({ result, onSurprise, totalPoints, hasWallet, onPlaybook }
 }
 
 // ============ SHARED HOTEL/FLIGHT BLOCK ============
-function HotelFlightBlock({ dest, totalPoints }) {
+function HotelFlightBlock({ dest, totalPoints, flights }) {
   return (
     <>
       <div style={{ background: "var(--cream)", borderRadius: 12, padding: 16, marginBottom: 12, border: "1px solid var(--border)" }}>
@@ -1089,8 +1341,8 @@ function HotelFlightBlock({ dest, totalPoints }) {
       </div>
       <div style={{ background: "var(--cream)", borderRadius: 12, padding: 16, border: "1px solid var(--border)" }}>
         <div style={{ fontSize: 10, fontWeight: 600, color: "var(--terracotta)", marginBottom: 10, letterSpacing: "0.1em", display: "flex", alignItems: "center", gap: 5 }}>{I.plane} FLIGHT OPTIONS (RT)</div>
-        {dest.flights.map((f,i) => (
-          <div key={i} style={{ padding: "8px 0", borderBottom: i<dest.flights.length-1?"1px solid var(--border)":"none", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
+        {(flights||[]).map((f,i) => (
+          <div key={i} style={{ padding: "8px 0", borderBottom: i<(flights||[]).length-1?"1px solid var(--border)":"none", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
             <div><div style={{ fontSize: 13, fontWeight: 500, display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>{f.airline} <Badge color="var(--sky)">{f.cabin}</Badge></div><div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 2 }}>{f.route}</div>
               <div style={{ marginTop: 2, fontSize: 10, color: totalPoints>=f.miles?"var(--sage-dark)":"var(--text-muted)" }}>{totalPoints>=f.miles?"✓ Enough points":`Need ${(f.miles-totalPoints).toLocaleString()} more`}</div>
             </div>
@@ -1103,7 +1355,7 @@ function HotelFlightBlock({ dest, totalPoints }) {
 }
 
 // ============ DESTINATION MODAL ============
-function DestinationModal({ dest, onClose, totalPoints, userCards, userLoyalty, onPlaybook }) {
+function DestinationModal({ dest, onClose, totalPoints, userCards, userLoyalty, onPlaybook, getFlights }) {
   if (!dest) return null;
   const bm = dest.bestMonths.map(m=>new Date(2024,m-1).toLocaleString('default',{month:'short'}));
   const hasW = (userCards?.length||0)+(userLoyalty?.length||0)>0;
@@ -1122,13 +1374,13 @@ function DestinationModal({ dest, onClose, totalPoints, userCards, userLoyalty, 
         <div style={{ textAlign: "left" }}><div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>Generate Booking Playbook</div><div style={{ fontSize: 11, color: "var(--text-muted)" }}>Step-by-step plan using your points</div></div>
         {I.chevron}
       </button>}
-      <HotelFlightBlock dest={dest} totalPoints={totalPoints} />
+      <HotelFlightBlock dest={dest} totalPoints={totalPoints} flights={getFlights(dest)} />
     </Modal>
   );
 }
 
 // ============ BOOKING PLAYBOOK ============
-function generatePlaybook(dest, userCards, userLoyalty) {
+function generatePlaybook(dest, userCards, userLoyalty, flights) {
   const C2L = { Hyatt:"hyatt", Hilton:"hilton", Marriott:"marriott", "Marriott (Autograph)":"marriott", "Marriott (Delta)":"marriott", IHG:"ihg" };
   const getCardFor = (partner) => userCards.filter(uc => { const info = CREDIT_CARDS.find(c=>c.id===uc.id); return info?.transferPartners?.includes(partner); }).map(uc=>({...uc,info:CREDIT_CARDS.find(c=>c.id===uc.id)}));
   const getLoyBal = (lid) => { const lp = userLoyalty.find(l=>l.id===lid); return lp?lp.points:0; };
@@ -1143,8 +1395,8 @@ function generatePlaybook(dest, userCards, userLoyalty) {
     userCards.forEach(uc => { const info = CREDIT_CARDS.find(c=>c.id===uc.id); if (!info) return; const pp = Math.ceil(cv/(info.portalMultiplier*0.01)); if (uc.points>=pp) { hotelOpts.push({hotel,method:"portal",totalCost:pp,cashCost:0,pointsCost:pp,cppValue:info.portalMultiplier,steps:[`Book ${hotel.name} via ${info.name} portal`,`Cost: ${pp.toLocaleString()} pts for $${cv.toLocaleString()} (${info.portalMultiplier}¢/pt)`],source:`${info.name} Portal`,priority:info.portalMultiplier>=1.5?2:1,cardId:uc.id}); }});
   });
 
-  dest.flights.forEach(flight => {
-    const al = {United:"united",Delta:"delta",American:"american",Southwest:"southwest"}[flight.airline];
+  (flights||[]).forEach(flight => {
+    const al = {United:"united",Delta:"delta","American Airlines":"american",American:"american",Southwest:"southwest"}[flight.airline];
     if (al) { const bal = getLoyBal(al); if (bal>=flight.miles) { const cpp=(flight.cash/flight.miles*100).toFixed(1); flightOpts.push({flight,method:"direct_loyalty",totalCost:flight.miles,cashCost:0,pointsCost:flight.miles,cppValue:parseFloat(cpp),steps:[`Book ${flight.airline} ${flight.route} in ${flight.cabin} using ${flight.miles.toLocaleString()} miles`,`Value: ${cpp}¢/mi ($${flight.cash} ticket)`],source:LOYALTY_PROGRAMS.find(l=>l.id===al)?.name||flight.airline,priority:3}); }}
     getCardFor(flight.airline).forEach(card => { if (card.points>=flight.miles) { const cpp=(flight.cash/flight.miles*100).toFixed(1); flightOpts.push({flight,method:"transfer",totalCost:flight.miles,cashCost:0,pointsCost:flight.miles,cppValue:parseFloat(cpp),steps:[`Transfer ${flight.miles.toLocaleString()} ${card.info.name} points → ${flight.airline}`,`Book ${flight.route} in ${flight.cabin}`,`Value: ${cpp}¢/mi ($${flight.cash} ticket)`],source:card.info.name,priority:4,cardId:card.id}); }});
     userCards.forEach(uc => { const info = CREDIT_CARDS.find(c=>c.id===uc.id); if (!info) return; const pp = Math.ceil(flight.cash/(info.portalMultiplier*0.01)); if (uc.points>=pp) { flightOpts.push({flight,method:"portal",totalCost:pp,cashCost:0,pointsCost:pp,cppValue:info.portalMultiplier,steps:[`Book ${flight.airline} ${flight.route} (${flight.cabin}) via ${info.name} portal`,`Cost: ${pp.toLocaleString()} pts for $${flight.cash} (${info.portalMultiplier}¢/pt)`],source:`${info.name} Portal`,priority:info.portalMultiplier>=1.5?2:1,cardId:uc.id}); }});
@@ -1158,10 +1410,10 @@ function generatePlaybook(dest, userCards, userLoyalty) {
   return { hotelOptions: hotelOpts, flightOptions: flightOpts, bestHotel: bestH, bestFlight: bestF, nights };
 }
 
-function PlaybookModal({ dest, onClose, userCards, userLoyalty, totalPoints }) {
+function PlaybookModal({ dest, onClose, userCards, userLoyalty, totalPoints, getFlights }) {
   if (!dest) return null;
   if ((userCards?.length||0)+(userLoyalty?.length||0)===0) return <Modal isOpen={!!dest} onClose={onClose} title="Booking Playbook"><EmptyState icon="💳" title="Add cards first" subtitle="Add credit cards and loyalty programs to generate a playbook." /></Modal>;
-  const pb = generatePlaybook(dest, userCards, userLoyalty);
+  const pb = generatePlaybook(dest, userCards, userLoyalty, getFlights(dest));
   const { bestHotel: bH, bestFlight: bF, nights } = pb;
   const steps = []; let n=0; let tPts=0; let tCash=0; const src={};
   if (bH) { bH.steps.forEach(s=>{n++;steps.push({num:n,text:s,type:"hotel"});}); tPts+=bH.pointsCost; tCash+=bH.cashCost; if(bH.source)src[bH.source]=(src[bH.source]||0)+bH.pointsCost; }
@@ -1470,7 +1722,7 @@ function InspoView({ inspoBoard, setInspoBoard, tasteProfile }) {
 }
 
 // ============ TRIP PLANNER ============
-function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, totalPoints }) {
+function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, totalPoints, getFlights }) {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ destId: "", dates: "", nights: 4, hotelIdx: 0, flightIdx: 0, notes: "", days: [] });
 
@@ -1480,16 +1732,18 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
   };
 
   const dest = DESTINATIONS.find(d => d.id === parseInt(form.destId));
+  const destFlights = dest ? getFlights(dest) : [];
 
   const generateDays = (n, d) => {
     if (!d) return [];
+    const df = getFlights(d);
     const days = [];
-    days.push({ day: 1, title: "Arrival Day", items: [`Arrive via ${d.flights[0]?.route || "flight"}`, `Check into ${d.hotels[0]?.name || "hotel"}`, "Explore the neighborhood, settle in"] });
+    days.push({ day: 1, title: "Arrival Day", items: [`Arrive via ${df[0]?.route || "flight"}`, `Check into ${d.hotels[0]?.name || "hotel"}`, "Explore the neighborhood, settle in"] });
     for (let i = 2; i < n; i++) {
       const activs = d.types.includes("beach") ? ["Beach morning, water sports", "Lunch at local spot", "Sunset drinks"] : d.types.includes("city") ? ["Walking tour of historic district", "Museum or gallery visit", "Dinner reservation at top-rated restaurant"] : d.types.includes("adventure") ? ["Morning hike or excursion", "Local lunch experience", "Afternoon activity"] : d.types.includes("wellness") ? ["Morning yoga or meditation", "Spa treatment", "Healthy dinner"] : ["Morning activity", "Afternoon exploration", "Evening experience"];
       days.push({ day: i, title: `Day ${i} — Explore`, items: activs });
     }
-    days.push({ day: n, title: "Departure Day", items: ["Pack up and check out", "Last-minute shopping or sightseeing", `Depart via ${d.flights[0]?.route || "flight"}`] });
+    days.push({ day: n, title: "Departure Day", items: ["Pack up and check out", "Last-minute shopping or sightseeing", `Depart via ${df[0]?.route || "flight"}`] });
     return days;
   };
 
@@ -1538,7 +1792,7 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
                 <div>
                   <label style={{ display: "block", fontSize: 11, color: "var(--terracotta)", marginBottom: 8, fontWeight: 600, letterSpacing: "0.08em" }}>SELECT FLIGHT</label>
                   <div style={{ display: "grid", gap: 6 }}>
-                    {dest.flights.map((f,i) => (
+                    {destFlights.map((f,i) => (
                       <button key={i} onClick={()=>setForm({...form,flightIdx:i})} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderRadius: 10, border: `1.5px solid ${form.flightIdx===i?"var(--terracotta)":"var(--border)"}`, background: form.flightIdx===i?"var(--terracotta-dim)":"var(--cream-light)", cursor: "pointer", textAlign: "left" }}>
                         <div><div style={{ fontSize: 13, fontWeight: 500 }}>{f.airline} · {f.cabin}</div><div style={{ fontSize: 11, color: "var(--text-muted)" }}>{f.route}</div></div>
                         <div style={{ textAlign: "right" }}><div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>{f.miles.toLocaleString()} mi</div><div style={{ fontSize: 11, color: "var(--text-muted)" }}>${f.cash}</div></div>
@@ -1571,7 +1825,7 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
                   <div style={{ fontSize: 10, fontWeight: 600, color: "var(--sage-dark)", marginBottom: 10, letterSpacing: "0.08em" }}>TRIP COST ESTIMATE</div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 13 }}>
                     <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "var(--text-secondary)", fontWeight: 300 }}>Hotel ({form.nights} nights)</span><span style={{ fontWeight: 500 }}>{dest.hotels[form.hotelIdx]?.pointsPerNight ? `${(dest.hotels[form.hotelIdx].pointsPerNight*form.nights).toLocaleString()} pts` : `$${(dest.hotels[form.hotelIdx]?.cashPerNight*form.nights).toLocaleString()}`}</span></div>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "var(--text-secondary)", fontWeight: 300 }}>Flight (RT)</span><span style={{ fontWeight: 500 }}>{dest.flights[form.flightIdx]?.miles.toLocaleString()} mi</span></div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "var(--text-secondary)", fontWeight: 300 }}>Flight (RT)</span><span style={{ fontWeight: 500 }}>{destFlights[form.flightIdx]?.miles.toLocaleString()} mi</span></div>
                   </div>
                 </div>
               </>
@@ -1606,7 +1860,7 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
                 </div>
                 <div style={{ display: "flex", gap: 8, marginBottom: 14, flexWrap: "wrap" }}>
                   {d?.hotels[trip.hotelIdx] && <Badge color="var(--sage-dark)">{I.hotel} {d.hotels[trip.hotelIdx].name}</Badge>}
-                  {d?.flights[trip.flightIdx] && <Badge color="var(--terracotta)">{I.plane} {d.flights[trip.flightIdx].airline} · {d.flights[trip.flightIdx].cabin}</Badge>}
+                  {d && getFlights(d)[trip.flightIdx] && <Badge color="var(--terracotta)">{I.plane} {getFlights(d)[trip.flightIdx].airline} · {getFlights(d)[trip.flightIdx].cabin}</Badge>}
                 </div>
                 {trip.days?.length > 0 && (
                   <div style={{ display: "grid", gap: 6 }}>
@@ -1629,7 +1883,7 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
 }
 
 // ============ GOALS TRACKER ============
-function GoalsView({ goals, setGoals, userCards, userLoyalty, totalPoints }) {
+function GoalsView({ goals, setGoals, userCards, userLoyalty, totalPoints, getFlights }) {
   const [adding, setAdding] = useState(false);
   const [gForm, setGForm] = useState({ destId: "", cabin: "economy", hotelIdx: 0, earnRate: 5000 });
 
@@ -1637,8 +1891,9 @@ function GoalsView({ goals, setGoals, userCards, userLoyalty, totalPoints }) {
     const dest = DESTINATIONS.find(d=>d.id===parseInt(gForm.destId));
     if (!dest) return 0;
     const hotel = dest.hotels[gForm.hotelIdx];
-    const flights = gForm.cabin === "business" ? dest.flights.filter(f=>f.cabin.toLowerCase().includes("business")||f.cabin.toLowerCase().includes("first")) : dest.flights.filter(f=>f.cabin.toLowerCase().includes("economy")||f.cabin.toLowerCase().includes("wanna"));
-    const flight = flights.length ? flights.reduce((b,f)=>(!b||f.miles<b.miles)?f:b,null) : dest.flights[0];
+    const allFlights = getFlights(dest);
+    const flights = gForm.cabin === "business" ? allFlights.filter(f=>f.cabin.toLowerCase().includes("business")||f.cabin.toLowerCase().includes("first")) : allFlights.filter(f=>f.cabin.toLowerCase().includes("economy")||f.cabin.toLowerCase().includes("wanna"));
+    const flight = flights.length ? flights.reduce((b,f)=>(!b||f.miles<b.miles)?f:b,null) : allFlights[0];
     return (hotel?.pointsPerNight ? hotel.pointsPerNight * 4 : 0) + (flight?.miles || 0);
   };
 
@@ -1750,7 +2005,7 @@ function GoalsView({ goals, setGoals, userCards, userLoyalty, totalPoints }) {
 }
 
 // ============ COMPARE MODAL ============
-function CompareModal({ isOpen, onClose, destinations, totalPoints, onClear }) {
+function CompareModal({ isOpen, onClose, destinations, totalPoints, onClear, getFlights }) {
   if (!isOpen || destinations.length < 2) return null;
   const cols = destinations.length;
   const Cell = ({ children, header, highlight }) => (
@@ -1790,16 +2045,16 @@ function CompareModal({ isOpen, onClose, destinations, totalPoints, onClear }) {
           {destinations.map(d => { const h=getBestHotelPoints(d); return <Cell key={d.id} highlight={h&&totalPoints>=h.pointsPerNight*4}>{h?`${(h.pointsPerNight*4).toLocaleString()} pts`:d.hotels[0]?`$${(d.hotels[0].cashPerNight*4).toLocaleString()}`:"—"}</Cell>; })}
 
           <Cell header>BEST FLIGHT (MI)</Cell>
-          {destinations.map(d => { const f=getBestFlightMiles(d); return <Cell key={d.id} highlight>{f?`${f.miles.toLocaleString()} mi`:"—"}</Cell>; })}
+          {destinations.map(d => { const f=getBestFlightMiles(getFlights(d)); return <Cell key={d.id} highlight>{f?`${f.miles.toLocaleString()} mi`:"—"}</Cell>; })}
 
           <Cell header>FLIGHT CASH</Cell>
-          {destinations.map(d => { const f=getBestFlightMiles(d); return <Cell key={d.id}>{f?`$${f.cash}`:"—"}</Cell>; })}
+          {destinations.map(d => { const f=getBestFlightMiles(getFlights(d)); return <Cell key={d.id}>{f?`$${f.cash}`:"—"}</Cell>; })}
 
           <Cell header>TOTAL POINTS</Cell>
-          {destinations.map(d => { const h=getBestHotelPoints(d); const f=getBestFlightMiles(d); const t=(h?h.pointsPerNight*4:0)+(f?f.miles:0); const ok=t>0&&totalPoints>=t; return <Cell key={d.id} highlight={ok}><span style={{ fontWeight: 600, color: ok?"var(--sage-dark)":"var(--text-primary)" }}>{t>0?t.toLocaleString():"N/A"}</span>{ok?" ✓":""}</Cell>; })}
+          {destinations.map(d => { const h=getBestHotelPoints(d); const f=getBestFlightMiles(getFlights(d)); const t=(h?h.pointsPerNight*4:0)+(f?f.miles:0); const ok=t>0&&totalPoints>=t; return <Cell key={d.id} highlight={ok}><span style={{ fontWeight: 600, color: ok?"var(--sage-dark)":"var(--text-primary)" }}>{t>0?t.toLocaleString():"N/A"}</span>{ok?" ✓":""}</Cell>; })}
 
           <Cell header>CASH EQUIVALENT</Cell>
-          {destinations.map(d => { const h=d.hotels[0]; const f=getBestFlightMiles(d); return <Cell key={d.id}>${((h?.cashPerNight||0)*4+(f?.cash||0)).toLocaleString()}</Cell>; })}
+          {destinations.map(d => { const h=d.hotels[0]; const f=getBestFlightMiles(getFlights(d)); return <Cell key={d.id}>${((h?.cashPerNight||0)*4+(f?.cash||0)).toLocaleString()}</Cell>; })}
         </div>
       </div>
     </Modal>
