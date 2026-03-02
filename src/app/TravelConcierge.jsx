@@ -699,6 +699,7 @@ export default function TravelConcierge() {
   const [vibePref, setVibePref] = useState("mix");
   const [regionPrefs, setRegionPrefs] = useState([]);
   const [homeAirport, setHomeAirport] = useState(null);
+  const [travelDates, setTravelDates] = useState(null);
   const [showAddCard, setShowAddCard] = useState(false);
   const [showAddLoyalty, setShowAddLoyalty] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(true);
@@ -723,6 +724,7 @@ export default function TravelConcierge() {
       if (saved) {
         const d = JSON.parse(saved);
         if (d.homeAirport) setHomeAirport(d.homeAirport);
+        if (d.travelDates) setTravelDates(d.travelDates);
         if (d.preferences?.length) setPreferences(d.preferences);
         if (d.budgetPref) setBudgetPref(d.budgetPref);
         if (d.vibePref) setVibePref(d.vibePref);
@@ -745,14 +747,14 @@ export default function TravelConcierge() {
     const timer = setTimeout(() => {
       try {
         localStorage.setItem("voyageur_data", JSON.stringify({
-          homeAirport, preferences, budgetPref, vibePref, regionPrefs,
+          homeAirport, travelDates, preferences, budgetPref, vibePref, regionPrefs,
           userCards, userLoyalty, tripHistory, inspoBoard, plannedTrips,
           goals, showOnboarding,
         }));
       } catch (e) { /* localStorage full or unavailable */ }
     }, 500);
     return () => clearTimeout(timer);
-  }, [homeAirport, preferences, budgetPref, vibePref, regionPrefs,
+  }, [homeAirport, travelDates, preferences, budgetPref, vibePref, regionPrefs,
       userCards, userLoyalty, tripHistory, inspoBoard, plannedTrips,
       goals, showOnboarding, hydrated]);
 
@@ -844,7 +846,7 @@ export default function TravelConcierge() {
           )}
           {onboardingStep === 1 && (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 1 OF 5</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 1 OF 6</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>Where do you fly from?</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 24, fontWeight: 300 }}>Select your home city so we can show you the best routes.</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 32, maxHeight: 320, overflowY: "auto", padding: "4px 0" }}>
@@ -858,7 +860,7 @@ export default function TravelConcierge() {
           )}
           {onboardingStep === 2 && (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 2 OF 5</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 2 OF 6</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>What kind of traveler are you?</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 28, fontWeight: 300 }}>Select all that apply.</p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 32 }}>
@@ -872,7 +874,7 @@ export default function TravelConcierge() {
           )}
           {onboardingStep === 3 && (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 3 OF 5</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 3 OF 6</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>What's your ideal budget?</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 24, fontWeight: 300 }}>Per-night hotel range.</p>
               <div style={{ display: "grid", gap: 8, maxWidth: 400, margin: "0 auto 28px" }}>
@@ -881,9 +883,56 @@ export default function TravelConcierge() {
               <div style={{ display: "flex", gap: 12, justifyContent: "center" }}><Button variant="secondary" onClick={() => setOnboardingStep(2)}>Back</Button><Button onClick={() => setOnboardingStep(4)}>Continue</Button></div>
             </div>
           )}
-          {onboardingStep === 4 && (
+          {onboardingStep === 4 && (() => {
+            const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+            const daysInMonth = (m) => { if (!m) return 31; return new Date(2025, m, 0).getDate(); };
+            const selMonth = travelDates?.month || "";
+            const selDay = travelDates?.day || "";
+            const selFlex = travelDates?.flexibility || "";
+            const isFlexible = selFlex === "flexible";
+            const canContinue = !!selFlex && (isFlexible || (selMonth && selDay));
+            const setField = (field, val) => setTravelDates(prev => ({ ...(prev || {}), [field]: val }));
+            const FLEX_OPTIONS = [
+              { id: "exact", icon: "📍", label: "Exact dates", color: "var(--sage)" },
+              { id: "3_days", icon: "📅", label: "± 3 days", color: "var(--sky)" },
+              { id: "1_week", icon: "🗓️", label: "± 1 week", color: "var(--warm-gold)" },
+              { id: "flexible", icon: "✨", label: "I'm flexible", color: "var(--terracotta)" },
+            ];
+            return (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 4 OF 5</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 4 OF 6</p>
+              <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>When are you planning to travel?</h2>
+              <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 28, fontWeight: 300 }}>Pick a target date, or tell us you're flexible.</p>
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", marginBottom: 24, opacity: isFlexible ? 0.4 : 1, transition: "opacity 0.2s" }}>
+                <select value={selMonth} onChange={e => setField("month", e.target.value ? Number(e.target.value) : "")} disabled={isFlexible}
+                  style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border-strong)", background: "var(--card-bg)", color: "var(--text-primary)", fontSize: 13, minWidth: 140, cursor: "pointer" }}>
+                  <option value="">Month</option>
+                  {MONTHS.map((m,i) => <option key={i} value={i+1}>{m}</option>)}
+                </select>
+                <select value={selDay} onChange={e => setField("day", e.target.value ? Number(e.target.value) : "")} disabled={isFlexible}
+                  style={{ padding: "10px 14px", borderRadius: 8, border: "1px solid var(--border-strong)", background: "var(--card-bg)", color: "var(--text-primary)", fontSize: 13, minWidth: 90, cursor: "pointer" }}>
+                  <option value="">Day</option>
+                  {Array.from({ length: daysInMonth(selMonth) }, (_, i) => <option key={i+1} value={i+1}>{i+1}</option>)}
+                </select>
+              </div>
+              <p style={{ color: "var(--text-secondary)", fontSize: 12, marginBottom: 12, fontWeight: 300 }}>How flexible are your dates?</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", marginBottom: 32 }}>
+                {FLEX_OPTIONS.map(o => <SelectPill key={o.id} icon={o.icon} label={o.label} color={o.color} active={selFlex === o.id}
+                  onClick={() => {
+                    if (o.id === "flexible") { setTravelDates({ flexibility: "flexible" }); }
+                    else { setTravelDates(prev => ({ month: prev?.month || "", day: prev?.day || "", flexibility: o.id })); }
+                  }} />)}
+              </div>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+                <Button variant="secondary" onClick={() => setOnboardingStep(3)}>Back</Button>
+                <Button onClick={() => setOnboardingStep(5)} disabled={!canContinue}>Continue</Button>
+              </div>
+            </div>
+            );
+          })()}
+          {onboardingStep === 5 && (
+            <div className="fade-up">
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 5 OF 6</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>Popular hotspots or hidden gems?</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 24, fontWeight: 300 }}>We'll tailor recommendations to your vibe.</p>
               <div style={{ display: "grid", gap: 8, maxWidth: 420, margin: "0 auto 28px" }}>
@@ -894,12 +943,12 @@ export default function TravelConcierge() {
               <div style={{ display: "flex", flexWrap: "wrap", gap: 7, justifyContent: "center", marginBottom: 28 }}>
                 {REGIONS.map(r => <SelectPill key={r.id} icon={r.icon} label={r.label} color="#8B9E7E" active={regionPrefs.includes(r.id)} onClick={() => setRegionPrefs(p => p.includes(r.id) ? p.filter(x => x !== r.id) : [...p, r.id])} />)}
               </div>
-              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}><Button variant="secondary" onClick={() => setOnboardingStep(3)}>Back</Button><Button onClick={() => setOnboardingStep(5)}>Continue</Button></div>
+              <div style={{ display: "flex", gap: 12, justifyContent: "center" }}><Button variant="secondary" onClick={() => setOnboardingStep(4)}>Back</Button><Button onClick={() => setOnboardingStep(6)}>Continue</Button></div>
             </div>
           )}
-          {onboardingStep === 5 && (
+          {onboardingStep === 6 && (
             <div className="fade-up">
-              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 5 OF 5</p>
+              <p style={{ color: "var(--sage)", fontSize: 11, fontWeight: 500, letterSpacing: "0.15em", marginBottom: 14 }}>TRAVEL PROFILE · 6 OF 6</p>
               <h2 style={{ fontFamily: serif, fontSize: 30, fontWeight: 400, marginBottom: 6 }}>Add your points & cards</h2>
               <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 24, fontWeight: 300 }}>You can always add more later.</p>
               {[...userCards.map((c,i) => { const info = CREDIT_CARDS.find(x=>x.id===c.id); return <div key={`c${i}`} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 14px", background: "var(--card-bg)", borderRadius: 10, marginBottom: 6, border: "1px solid var(--border)" }}><div style={{ display: "flex", alignItems: "center", gap: 8 }}><div style={{ width: 32, height: 20, borderRadius: 4, background: info?.color }} /><span style={{ fontSize: 12, fontWeight: 500 }}>{info?.name}</span></div><span style={{ color: "var(--sage-dark)", fontWeight: 600, fontSize: 12 }}>{c.points?.toLocaleString()} pts</span></div>; }),
@@ -910,7 +959,7 @@ export default function TravelConcierge() {
                 <Button variant="secondary" onClick={() => setShowAddLoyalty(true)} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12 }}>{I.plus} Loyalty Program</Button>
               </div>
               <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-                <Button variant="secondary" onClick={() => setOnboardingStep(4)}>Back</Button>
+                <Button variant="secondary" onClick={() => setOnboardingStep(5)}>Back</Button>
                 <Button onClick={() => setShowOnboarding(false)} style={{ padding: "12px 36px" }}>{(userCards.length+userLoyalty.length) > 0 ? "Let's Go" : "Skip for Now"}</Button>
               </div>
             </div>
