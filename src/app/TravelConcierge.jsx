@@ -700,6 +700,8 @@ export default function TravelConcierge() {
   const [regionPrefs, setRegionPrefs] = useState([]);
   const [homeAirport, setHomeAirport] = useState(null);
   const [travelDates, setTravelDates] = useState(null);
+  const [calMonth, setCalMonth] = useState(() => new Date().getMonth());
+  const [calYear, setCalYear] = useState(() => new Date().getFullYear());
   const [showAddCard, setShowAddCard] = useState(false);
   const [showAddLoyalty, setShowAddLoyalty] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(true);
@@ -896,8 +898,6 @@ export default function TravelConcierge() {
               { id: "flexible", icon: "✨", label: "I'm flexible", color: "var(--terracotta)" },
             ];
             const today = new Date(); today.setHours(0,0,0,0);
-            const [calMonth, setCalMonth] = useState(today.getMonth());
-            const [calYear, setCalYear] = useState(today.getFullYear());
             const MNAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
             const DNAMES = ["Su","Mo","Tu","We","Th","Fr","Sa"];
             const toStr = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
