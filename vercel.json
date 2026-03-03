@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/update-prices?batch=0&size=6",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/update-prices?batch=1&size=6",
+      "schedule": "2 6 * * *"
+    },
+    {
+      "path": "/api/cron/update-prices?batch=2&size=6",
+      "schedule": "4 6 * * *"
+    }
+  ]
+}

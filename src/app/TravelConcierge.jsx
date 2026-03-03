@@ -666,6 +666,30 @@ function buildCheckPriceUrl(hotel, dest, travelDates) {
   return hotel.checkPriceUrl || null;
 }
 
+// ============ LIVE PRICING HELPER ============
+function slugifyHotel(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+function getEffectivePricing(hotel, livePricing) {
+  if (!livePricing || !hotel) return { pointsPerNight: hotel?.pointsPerNight, cashPerNight: hotel?.cashPerNight, isLive: false };
+  const key = slugifyHotel(hotel.name);
+  const live = livePricing[key];
+  if (live && live.pointsPerNight) {
+    const staleThreshold = 72 * 60 * 60 * 1000; // 72 hours
+    const isStale = live.cachedAt && (Date.now() - live.cachedAt > staleThreshold);
+    return {
+      pointsPerNight: live.pointsPerNight,
+      cashPerNight: hotel.cashPerNight, // cash stays hardcoded for now
+      isLive: true,
+      isStale,
+      availability: live.availability,
+      medianCPP: live.medianCPP,
+    };
+  }
+  return { pointsPerNight: hotel?.pointsPerNight, cashPerNight: hotel?.cashPerNight, isLive: false };
+}
+
 function getBestHotelPoints(dest) {
   const r = dest.hotels.filter(h => h.pointsPerNight);
   if (!r.length) return null;
@@ -787,6 +811,7 @@ export default function TravelConcierge() {
   const [inspoBoard, setInspoBoard] = useState([]);
   const [recapTrip, setRecapTrip] = useState(null);
   const [hydrated, setHydrated] = useState(false);
+  const [livePricing, setLivePricing] = useState({});
 
   // Load saved data from localStorage on mount
   useEffect(() => {
@@ -810,6 +835,14 @@ export default function TravelConcierge() {
       }
     } catch (e) { /* ignore corrupted localStorage */ }
     setHydrated(true);
+  }, []);
+
+  // Fetch live pricing from API on mount
+  useEffect(() => {
+    fetch("/api/hotels/prices")
+      .then(res => res.ok ? res.json() : {})
+      .then(data => setLivePricing(data || {}))
+      .catch(() => {}); // Fail silently — hardcoded fallbacks always available
   }, []);
 
   // Save to localStorage on every state change (debounced)
@@ -1131,14 +1164,14 @@ export default function TravelConcierge() {
         {activeTab === "planner" && <PlannerView {...{plannedTrips,setPlannedTrips,userCards,userLoyalty,totalPoints,getFlights}} />}
         {activeTab === "trips" && <TripsView {...{tripHistory,setTripHistory}} onAddTrip={()=>setShowTripModal(true)} onRecap={setRecapTrip} />}
         {activeTab === "goals" && <GoalsView {...{goals,setGoals,userCards,userLoyalty,totalPoints,getFlights}} />}
-        {activeTab === "surprise" && <SurpriseView result={surpriseResult} onSurprise={handleSurpriseMe} totalPoints={totalPoints} hasWallet={(userCards.length+userLoyalty.length)>0} onPlaybook={d=>setPlaybookDest(d)} getFlights={getFlights} homeAirport={homeAirport} travelDates={travelDates} />}
+        {activeTab === "surprise" && <SurpriseView result={surpriseResult} onSurprise={handleSurpriseMe} totalPoints={totalPoints} hasWallet={(userCards.length+userLoyalty.length)>0} onPlaybook={d=>setPlaybookDest(d)} getFlights={getFlights} homeAirport={homeAirport} travelDates={travelDates} livePricing={livePricing} />}
       </main>
       <AddCardModal isOpen={showAddCard} onClose={()=>setShowAddCard(false)} userCards={userCards} onAdd={c=>{setUserCards([...userCards,c]);setShowAddCard(false);}} />
       <AddLoyaltyModal isOpen={showAddLoyalty} onClose={()=>setShowAddLoyalty(false)} userLoyalty={userLoyalty} onAdd={l=>{setUserLoyalty([...userLoyalty,l]);setShowAddLoyalty(false);}} />
-      <DestinationModal dest={selectedDest} onClose={()=>setSelectedDest(null)} totalPoints={totalPoints} userCards={userCards} userLoyalty={userLoyalty} onPlaybook={d=>{setSelectedDest(null);setPlaybookDest(d);}} getFlights={getFlights} homeAirport={homeAirport} travelDates={travelDates} />
-      <PlaybookModal dest={playbookDest} onClose={()=>setPlaybookDest(null)} userCards={userCards} userLoyalty={userLoyalty} totalPoints={totalPoints} getFlights={getFlights} homeAirport={homeAirport} travelDates={travelDates} />
+      <DestinationModal dest={selectedDest} onClose={()=>setSelectedDest(null)} totalPoints={totalPoints} userCards={userCards} userLoyalty={userLoyalty} onPlaybook={d=>{setSelectedDest(null);setPlaybookDest(d);}} getFlights={getFlights} homeAirport={homeAirport} travelDates={travelDates} livePricing={livePricing} />
+      <PlaybookModal dest={playbookDest} onClose={()=>setPlaybookDest(null)} userCards={userCards} userLoyalty={userLoyalty} totalPoints={totalPoints} getFlights={getFlights} homeAirport={homeAirport} travelDates={travelDates} livePricing={livePricing} />
       <AddTripModal isOpen={showTripModal} onClose={()=>setShowTripModal(false)} trip={newTrip} setTrip={setNewTrip} onSave={()=>{const hr=newTrip.ratings&&Object.values(newTrip.ratings).some(v=>v>0);if(newTrip.destination&&hr){setTripHistory([...tripHistory,{...newTrip,id:Date.now()}]);setNewTrip({destination:"",type:"",ratings:{food:0,nightlife:0,activities:0,value:0,culture:0},notes:"",date:"",hotel:"",flight:"",pointsSpent:"",cashSaved:"",highlights:""});setShowTripModal(false);}}} />
-      <CompareModal isOpen={showCompare} onClose={()=>setShowCompare(false)} destinations={compareList.map(id=>DESTINATIONS.find(d=>d.id===id)).filter(Boolean)} totalPoints={totalPoints} onClear={()=>setCompareList([])} getFlights={getFlights} />
+      <CompareModal isOpen={showCompare} onClose={()=>setShowCompare(false)} destinations={compareList.map(id=>DESTINATIONS.find(d=>d.id===id)).filter(Boolean)} totalPoints={totalPoints} onClear={()=>setCompareList([])} getFlights={getFlights} livePricing={livePricing} />
       <RecapModal trip={recapTrip} onClose={()=>setRecapTrip(null)} />
     </div>
   );
@@ -1519,7 +1552,7 @@ function TripsView({ tripHistory, setTripHistory, onAddTrip, onRecap }) {
   );
 }
 
-function SurpriseView({ result, onSurprise, totalPoints, hasWallet, onPlaybook, getFlights, homeAirport, travelDates }) {
+function SurpriseView({ result, onSurprise, totalPoints, hasWallet, onPlaybook, getFlights, homeAirport, travelDates, livePricing }) {
   return (
     <div style={{ textAlign: "center" }}>
       <div className="fade-up" style={{ marginBottom: 36, paddingTop: 16 }}>
@@ -1537,7 +1570,7 @@ function SurpriseView({ result, onSurprise, totalPoints, hasWallet, onPlaybook, 
             <Badge color={result.vibe==="hidden"?"var(--sage)":"var(--terracotta)"}>{result.vibe==="hidden"?"🗺️ Hidden Gem":"🔥 Popular"}</Badge>
           </div>
           <p style={{ color: "var(--text-secondary)", fontSize: 13, marginBottom: 16, lineHeight: 1.6, textAlign: "center", fontWeight: 300 }}>{result.highlight}</p>
-          <HotelFlightBlock dest={result} totalPoints={totalPoints} flights={getFlights(result)} homeAirport={homeAirport} travelDates={travelDates} />
+          <HotelFlightBlock dest={result} totalPoints={totalPoints} flights={getFlights(result)} homeAirport={homeAirport} travelDates={travelDates} livePricing={livePricing} />
           <div style={{ textAlign: "center", marginTop: 16, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             {hasWallet && <Button onClick={()=>onPlaybook?.(result)}>📋 Booking Playbook</Button>}
             <Button onClick={onSurprise} variant="secondary">↻ Try Another</Button>
@@ -1549,28 +1582,30 @@ function SurpriseView({ result, onSurprise, totalPoints, hasWallet, onPlaybook, 
 }
 
 // ============ SHARED HOTEL/FLIGHT BLOCK ============
-function HotelFlightBlock({ dest, totalPoints, flights, homeAirport, travelDates }) {
+function HotelFlightBlock({ dest, totalPoints, flights, homeAirport, travelDates, livePricing }) {
   const origin = homeAirport?.primaryIntl || "JFK";
   const destAirport = dest.destinationAirports?.[0] || "";
   return (
     <>
       <div style={{ background: "var(--cream)", borderRadius: 12, padding: 16, marginBottom: 12, border: "1px solid var(--border)" }}>
         <div style={{ fontSize: 10, fontWeight: 600, color: "var(--sage-dark)", marginBottom: 10, letterSpacing: "0.1em", display: "flex", alignItems: "center", gap: 5 }}>{I.hotel} HOTEL OPTIONS</div>
-        {dest.hotels.map((h,i) => (
+        {dest.hotels.map((h,i) => {
+          const ep = getEffectivePricing(h, livePricing);
+          return (
           <div key={i} style={{ padding: "10px 0", borderBottom: i<dest.hotels.length-1?"1px solid var(--border)":"none" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
-              <div><div style={{ fontSize: 13, fontWeight: 500 }}>{h.name}</div><div style={{ display: "flex", gap: 4, marginTop: 2, flexWrap: "wrap", alignItems: "center" }}><Badge color="var(--dusty-rose)">{h.chain}</Badge>{h.category!=="N/A" && <Badge color="var(--text-muted)">{h.category}</Badge>}</div>
+              <div><div style={{ fontSize: 13, fontWeight: 500 }}>{h.name}</div><div style={{ display: "flex", gap: 4, marginTop: 2, flexWrap: "wrap", alignItems: "center" }}><Badge color="var(--dusty-rose)">{h.chain}</Badge>{h.category!=="N/A" && <Badge color="var(--text-muted)">{h.category}</Badge>}{ep.isLive && <Badge color="var(--sage-dark)">● Live</Badge>}</div>
                 <DistinctionBadges distinctions={h.distinctions} />
               </div>
               <div style={{ textAlign: "right", flexShrink: 0 }}>
-                {h.pointsPerNight ? <div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>Est. ~{h.pointsPerNight.toLocaleString()} <span style={{ fontSize: 10, fontWeight: 400 }}>pts/nt</span></div> : <div style={{ fontSize: 11, color: "var(--text-muted)" }}>Cash only</div>}
+                {ep.pointsPerNight ? <div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>{ep.isLive ? "" : "Est. ~"}{ep.pointsPerNight.toLocaleString()} <span style={{ fontSize: 10, fontWeight: 400 }}>pts/nt</span></div> : <div style={{ fontSize: 11, color: "var(--text-muted)" }}>Cash only</div>}
                 <div style={{ fontSize: 10, color: "var(--text-muted)" }}>${h.cashPerNight}/nt cash</div>
               </div>
             </div>
             {(() => { const url = buildCheckPriceUrl(h, dest, travelDates); return url ? <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 8, padding: "10px 16px", borderRadius: 8, background: "var(--sage)", color: "#fff", fontSize: 12, fontWeight: 500, textAlign: "center", textDecoration: "none", letterSpacing: "0.04em", cursor: "pointer", transition: "opacity 0.2s" }} onMouseEnter={e=>e.currentTarget.style.opacity="0.88"} onMouseLeave={e=>e.currentTarget.style.opacity="1"}>Check Live Price →</a> : null; })()}
             {h.comparePriceUrl && <a href={`https://search.maxmypoint.com/?query=${encodeURIComponent(h.name)}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 4, fontSize: 11, color: "var(--text-muted)", textAlign: "center", textDecoration: "underline", textUnderlineOffset: 2, cursor: "pointer" }}>Compare on MaxMyPoint</a>}
           </div>
-        ))}
+        ); })}
       </div>
       <div style={{ background: "var(--cream)", borderRadius: 12, padding: 16, border: "1px solid var(--border)" }}>
         <div style={{ fontSize: 10, fontWeight: 600, color: "var(--terracotta)", marginBottom: 10, letterSpacing: "0.1em", display: "flex", alignItems: "center", gap: 5 }}>{I.plane} FLIGHT OPTIONS (RT)</div>
@@ -1589,7 +1624,7 @@ function HotelFlightBlock({ dest, totalPoints, flights, homeAirport, travelDates
 }
 
 // ============ DESTINATION MODAL ============
-function DestinationModal({ dest, onClose, totalPoints, userCards, userLoyalty, onPlaybook, getFlights, homeAirport, travelDates }) {
+function DestinationModal({ dest, onClose, totalPoints, userCards, userLoyalty, onPlaybook, getFlights, homeAirport, travelDates, livePricing }) {
   if (!dest) return null;
   const bm = dest.bestMonths.map(m=>new Date(2024,m-1).toLocaleString('default',{month:'short'}));
   const hasW = (userCards?.length||0)+(userLoyalty?.length||0)>0;
@@ -1608,7 +1643,7 @@ function DestinationModal({ dest, onClose, totalPoints, userCards, userLoyalty, 
         <div style={{ textAlign: "left" }}><div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>Generate Booking Playbook</div><div style={{ fontSize: 11, color: "var(--text-muted)" }}>Step-by-step plan using your points</div></div>
         {I.chevron}
       </button>}
-      <HotelFlightBlock dest={dest} totalPoints={totalPoints} flights={getFlights(dest)} homeAirport={homeAirport} travelDates={travelDates} />
+      <HotelFlightBlock dest={dest} totalPoints={totalPoints} flights={getFlights(dest)} homeAirport={homeAirport} travelDates={travelDates} livePricing={livePricing} />
     </Modal>
   );
 }
@@ -1644,7 +1679,7 @@ function generatePlaybook(dest, userCards, userLoyalty, flights) {
   return { hotelOptions: hotelOpts, flightOptions: flightOpts, bestHotel: bestH, bestFlight: bestF, nights };
 }
 
-function PlaybookModal({ dest, onClose, userCards, userLoyalty, totalPoints, getFlights, homeAirport, travelDates }) {
+function PlaybookModal({ dest, onClose, userCards, userLoyalty, totalPoints, getFlights, homeAirport, travelDates, livePricing }) {
   if (!dest) return null;
   if ((userCards?.length||0)+(userLoyalty?.length||0)===0) return <Modal isOpen={!!dest} onClose={onClose} title="Booking Playbook"><EmptyState icon="💳" title="Add cards first" subtitle="Add credit cards and loyalty programs to generate a playbook." /></Modal>;
   const pb = generatePlaybook(dest, userCards, userLoyalty, getFlights(dest));
@@ -1701,7 +1736,7 @@ function PlaybookModal({ dest, onClose, userCards, userLoyalty, totalPoints, get
           {bH && <div style={{ background: "var(--cream)", borderRadius: 12, padding: 16, borderLeft: "3px solid var(--sage)" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
               <div style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--sage-dim)", color: "var(--sage-dark)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, fontWeight: 700, flexShrink: 0 }}>1</div>
-              <div><div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>Check live award pricing</div><div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 300 }}>{bH.hotel.name} · Est. ~{(bH.hotel.pointsPerNight||0).toLocaleString()} pts/nt</div></div>
+              <div><div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>Check live award pricing</div><div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 300 }}>{bH.hotel.name} · {(() => { const ep = getEffectivePricing(bH.hotel, livePricing); return ep.isLive ? `${ep.pointsPerNight.toLocaleString()} pts/nt` : `Est. ~${(bH.hotel.pointsPerNight||0).toLocaleString()} pts/nt`; })()}</div></div>
             </div>
             {(() => { const url = buildCheckPriceUrl(bH.hotel, dest, travelDates); return url ? <a href={url} target="_blank" rel="noopener noreferrer" style={{ display: "block", padding: "10px 16px", borderRadius: 8, background: "var(--sage)", color: "#fff", fontSize: 12, fontWeight: 500, textAlign: "center", textDecoration: "none", letterSpacing: "0.04em", cursor: "pointer" }}>Check Live Price →</a> : null; })()}
           </div>}
@@ -2271,7 +2306,7 @@ function GoalsView({ goals, setGoals, userCards, userLoyalty, totalPoints, getFl
 }
 
 // ============ COMPARE MODAL ============
-function CompareModal({ isOpen, onClose, destinations, totalPoints, onClear, getFlights }) {
+function CompareModal({ isOpen, onClose, destinations, totalPoints, onClear, getFlights, livePricing }) {
   if (!isOpen || destinations.length < 2) return null;
   const cols = destinations.length;
   const Cell = ({ children, header, highlight }) => (
@@ -2305,10 +2340,10 @@ function CompareModal({ isOpen, onClose, destinations, totalPoints, onClear, get
           {destinations.map(d => <Cell key={d.id}><div style={{ display: "flex", gap: 3, flexWrap: "wrap" }}>{d.types.slice(0,3).map(t=><Badge key={t} color="var(--text-muted)">{TRIP_TYPES.find(x=>x.id===t)?.icon}</Badge>)}</div></Cell>)}
 
           <Cell header>BEST HOTEL (PTS)</Cell>
-          {destinations.map(d => { const h=getBestHotelPoints(d); return <Cell key={d.id} highlight>{h?`${h.pointsPerNight.toLocaleString()}/nt`:"Cash only"}</Cell>; })}
+          {destinations.map(d => { const h=getBestHotelPoints(d); if (!h) return <Cell key={d.id}>Cash only</Cell>; const ep=getEffectivePricing(h, livePricing); return <Cell key={d.id} highlight>{ep.isLive?"":"~"}{ep.pointsPerNight.toLocaleString()}/nt{ep.isLive?" ●":""}</Cell>; })}
 
           <Cell header>HOTEL (4 NIGHTS)</Cell>
-          {destinations.map(d => { const h=getBestHotelPoints(d); return <Cell key={d.id} highlight={h&&totalPoints>=h.pointsPerNight*4}>{h?`${(h.pointsPerNight*4).toLocaleString()} pts`:d.hotels[0]?`$${(d.hotels[0].cashPerNight*4).toLocaleString()}`:"—"}</Cell>; })}
+          {destinations.map(d => { const h=getBestHotelPoints(d); if (!h) return <Cell key={d.id}>{d.hotels[0]?`$${(d.hotels[0].cashPerNight*4).toLocaleString()}`:"—"}</Cell>; const ep=getEffectivePricing(h, livePricing); return <Cell key={d.id} highlight={totalPoints>=ep.pointsPerNight*4}>{(ep.pointsPerNight*4).toLocaleString()} pts</Cell>; })}
 
           <Cell header>BEST FLIGHT (MI)</Cell>
           {destinations.map(d => { const f=getBestFlightMiles(getFlights(d)); return <Cell key={d.id} highlight>{f?`${f.miles.toLocaleString()} mi`:"—"}</Cell>; })}
@@ -2317,7 +2352,7 @@ function CompareModal({ isOpen, onClose, destinations, totalPoints, onClear, get
           {destinations.map(d => { const f=getBestFlightMiles(getFlights(d)); return <Cell key={d.id}>{f?`$${f.cash}`:"—"}</Cell>; })}
 
           <Cell header>TOTAL POINTS</Cell>
-          {destinations.map(d => { const h=getBestHotelPoints(d); const f=getBestFlightMiles(getFlights(d)); const t=(h?h.pointsPerNight*4:0)+(f?f.miles:0); const ok=t>0&&totalPoints>=t; return <Cell key={d.id} highlight={ok}><span style={{ fontWeight: 600, color: ok?"var(--sage-dark)":"var(--text-primary)" }}>{t>0?t.toLocaleString():"N/A"}</span>{ok?" ✓":""}</Cell>; })}
+          {destinations.map(d => { const h=getBestHotelPoints(d); const f=getBestFlightMiles(getFlights(d)); const ep=h?getEffectivePricing(h,livePricing):null; const t=(ep?ep.pointsPerNight*4:0)+(f?f.miles:0); const ok=t>0&&totalPoints>=t; return <Cell key={d.id} highlight={ok}><span style={{ fontWeight: 600, color: ok?"var(--sage-dark)":"var(--text-primary)" }}>{t>0?t.toLocaleString():"N/A"}</span>{ok?" ✓":""}</Cell>; })}
 
           <Cell header>CASH EQUIVALENT</Cell>
           {destinations.map(d => { const h=d.hotels[0]; const f=getBestFlightMiles(getFlights(d)); return <Cell key={d.id}>${((h?.cashPerNight||0)*4+(f?.cash||0)).toLocaleString()}</Cell>; })}
