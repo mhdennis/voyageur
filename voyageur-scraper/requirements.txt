@@ -1,0 +1,17 @@
+# Voyageur Scraper — Python Dependencies
+
+# Async Playwright (headless browser automation)
+playwright==1.42.0
+
+# FastAPI + ASGI server
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
+
+# Async SQLite
+aiosqlite==0.20.0
+
+# Data validation (FastAPI dependency)
+pydantic==2.6.4
+
+# Optional: schedule automatic daily scrapes
+# apscheduler==3.10.4

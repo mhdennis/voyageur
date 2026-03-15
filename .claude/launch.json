@@ -1,0 +1,14 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/Users/mayadennis/.local/node-v20.18.0-darwin-x64/bin/npx",
+      "runtimeArgs": ["next", "dev"],
+      "env": {
+        "PATH": "/Users/mayadennis/.local/node-v20.18.0-darwin-x64/bin:/usr/bin:/bin"
+      },
+      "port": 3000
+    }
+  ]
+}

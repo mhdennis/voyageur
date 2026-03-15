@@ -357,123 +357,79 @@ const ALL_TASTE_TAGS = TASTE_TAGS.flatMap(g => g.tags.map(t => ({ ...t, group: g
 const DESTINATIONS = [
   { id: 1, name: "Tulum", country: "Mexico", region: "caribbean", image: "🌴", vibe: "popular", types: ["beach", "baecation", "girls_trip", "wellness"], bestMonths: [11,12,1,2,3,4], budgetTier: "mid", highlight: "Cenotes, beach clubs & Mayan ruins",
     tasteTags: ["beach_clubs","cenotes","mezcal_tequila","yoga_retreat","design_hotels","rooftop_bars","photo_spots","chill_slow"],
-    hotels: [{ name: "Conrad Tulum Riviera Maya", chain: "Hilton", category: "Cat 50", pointsPerNight: 80000, cashPerNight: 450, distinctions: ["Forbes 4-Star", "FHR"], checkPriceUrl: "https://www.hilton.com/en/search/?query=Tulum+Mexico", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Ziva Riviera Cancún", chain: "Hyatt", category: "Cat 5", pointsPerNight: 25000, cashPerNight: 320, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Cancun+Mexico", comparePriceUrl: "https://maxmypoint.com" },{ name: "Marriott Cancún Resort", chain: "Marriott", category: "Cat 6", pointsPerNight: 50000, cashPerNight: 280, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Cancun+Mexico", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Ziva Riviera Cancún", chain: "Hyatt", category: "Cat 5", pointsPerNight: 25000, cashPerNight: 320, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Cancun+Mexico", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["CUN"] },
   { id: 2, name: "Bali", country: "Indonesia", region: "asia", image: "🛕", vibe: "popular", types: ["solo", "baecation", "wellness", "adventure", "family"], bestMonths: [4,5,6,7,8,9], budgetTier: "budget", highlight: "Rice terraces, temples & surf",
     tasteTags: ["temple_spiritual","surfing","yoga_retreat","spa_days","rice_terraces","coffee_culture","chill_slow","design_hotels","sunrise_hike"],
-    hotels: [{ name: "Alila Villas Uluwatu", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 400, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Bali+Indonesia", comparePriceUrl: "https://maxmypoint.com" },{ name: "W Bali - Seminyak", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 350, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Bali+Indonesia", comparePriceUrl: "https://maxmypoint.com" },{ name: "Four Points Seminyak", chain: "Marriott", category: "Cat 3", pointsPerNight: 20000, cashPerNight: 120, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Bali+Indonesia", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Alila Villas Uluwatu", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 400, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Bali+Indonesia", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["DPS"] },
   { id: 3, name: "Park City", country: "USA", region: "north_america", image: "🎿", vibe: "popular", types: ["ski", "guys_trip", "family"], bestMonths: [12,1,2,3], budgetTier: "luxury", highlight: "World-class slopes & après-ski",
     tasteTags: ["hiking","luxury_splurge","craft_cocktails","lounge_vibes","family_friendly"],
-    hotels: [{ name: "Hyatt Centric Park City", chain: "Hyatt", category: "Cat 5", pointsPerNight: 21000, cashPerNight: 350, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Park+City+Utah", comparePriceUrl: "https://maxmypoint.com" },{ name: "Marriott Mountainside", chain: "Marriott", category: "Cat 6", pointsPerNight: 50000, cashPerNight: 420, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Park+City+Utah", comparePriceUrl: "https://maxmypoint.com" },{ name: "Pendry Park City", chain: "Marriott (Autograph)", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 550, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Park+City+Utah", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Centric Park City", chain: "Hyatt", category: "Cat 5", pointsPerNight: 21000, cashPerNight: 350, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Park+City+Utah", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["SLC"] },
   { id: 4, name: "Lisbon", country: "Portugal", region: "europe", image: "🏛️", vibe: "popular", types: ["solo", "baecation", "city", "girls_trip", "family"], bestMonths: [3,4,5,6,9,10], budgetTier: "mid", highlight: "Pastéis de nata, trams & fado",
     tasteTags: ["street_food","natural_wine","walking_neighborhoods","art_galleries","coffee_culture","rooftop_bars","photo_spots","architecture","bookshops"],
-    hotels: [{ name: "Hyatt Regency Lisboa", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 220, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Lisbon+Portugal", comparePriceUrl: "https://maxmypoint.com" },{ name: "Moxy Lisbon City", chain: "Marriott", category: "Cat 4", pointsPerNight: 30000, cashPerNight: 160, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Lisbon+Portugal", comparePriceUrl: "https://maxmypoint.com" },{ name: "Tivoli Avenida Liberdade", chain: "Minor (Amex FHR)", category: "FHR", pointsPerNight: null, cashPerNight: 320, distinctions: ["Forbes 4-Star", "FHR"], checkPriceUrl: "https://www.tivolihotels.com/en/tivoli-avenida-liberdade-lisboa", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Regency Lisboa", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 220, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Lisbon+Portugal", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["LIS"] },
   { id: 5, name: "Tokyo", country: "Japan", region: "asia", image: "🗼", vibe: "popular", types: ["solo", "city"], bestMonths: [3,4,10,11], budgetTier: "mid", highlight: "Ramen, cherry blossoms & Shibuya",
     tasteTags: ["street_food","coffee_culture","architecture","temple_spiritual","local_markets","photo_spots","vibrant_energy","fine_dining"],
-    hotels: [{ name: "Hyatt Regency Tokyo", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 200, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Tokyo+Japan", comparePriceUrl: "https://maxmypoint.com" },{ name: "The Prince Gallery Kioicho", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 380, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Tokyo+Japan", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hilton Tokyo", chain: "Hilton", category: "Cat 30", pointsPerNight: 50000, cashPerNight: 250, checkPriceUrl: "https://www.hilton.com/en/search/?query=Tokyo+Japan", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Regency Tokyo", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 200, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Tokyo+Japan", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["NRT", "HND"] },
   { id: 6, name: "Maldives", country: "Maldives", region: "indian_ocean", image: "🐠", vibe: "popular", types: ["baecation", "beach", "wellness"], bestMonths: [11,12,1,2,3,4], budgetTier: "luxury", highlight: "Overwater villas & pristine reefs",
     tasteTags: ["water_sports","spa_days","luxury_splurge","romantic","sunrise_hike","chill_slow","boat_day","design_hotels"],
-    hotels: [{ name: "Park Hyatt Hadahaa", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 900, distinctions: ["Michelin Key", "Forbes 5-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Maldives", comparePriceUrl: "https://maxmypoint.com" },{ name: "Waldorf Astoria Maldives", chain: "Hilton", category: "Cat 60", pointsPerNight: 120000, cashPerNight: 1800, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.hilton.com/en/search/?query=Maldives", comparePriceUrl: "https://maxmypoint.com" },{ name: "St. Regis Vommuli", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 1500, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Maldives", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Park Hyatt Hadahaa", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 900, distinctions: ["Michelin Key", "Forbes 5-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Maldives", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["MLE"] },
-  { id: 9, name: "Amalfi Coast", country: "Italy", region: "europe", image: "🍋", vibe: "popular", types: ["baecation", "girls_trip", "beach"], bestMonths: [5,6,7,8,9], budgetTier: "luxury", highlight: "Limoncello, cliffside towns & pasta",
-    tasteTags: ["fine_dining","seafood","boat_day","photo_spots","romantic","walking_neighborhoods","luxury_splurge","natural_wine"],
-    hotels: [{ name: "NH Grand Hotel Convento", chain: "Minor (NH)", category: "N/A", pointsPerNight: null, cashPerNight: 500, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.nh-hotels.com/en/hotel/nh-collection-grand-hotel-convento-di-amalfi", comparePriceUrl: "https://maxmypoint.com" },{ name: "Monastero Santa Rosa", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 850, distinctions: ["Michelin Key", "LHW", "Forbes 5-Star"], checkPriceUrl: "https://www.monasterosantarosa.com", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hotel Marina Riviera", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 350, checkPriceUrl: "https://www.marinariviera.it", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["NAP"] },
   { id: 11, name: "Turks & Caicos", country: "Turks & Caicos", region: "caribbean", image: "🐚", vibe: "popular", types: ["beach", "baecation", "family"], bestMonths: [11,12,1,2,3,4,5], budgetTier: "luxury", highlight: "Grace Bay Beach & crystal water",
     tasteTags: ["water_sports","beach_clubs","chill_slow","luxury_splurge","boat_day","spa_days","family_friendly"],
-    hotels: [{ name: "Ritz-Carlton Turks & Caicos", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 950, distinctions: ["Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Turks+and+Caicos", comparePriceUrl: "https://maxmypoint.com" },{ name: "The Palms TCI", chain: "Hyatt (Leading Hotels)", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 700, distinctions: ["LHW", "Forbes 4-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Turks+and+Caicos", comparePriceUrl: "https://maxmypoint.com" },{ name: "Wymara Resort", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 550, checkPriceUrl: "https://www.wymararesortandvillas.com", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "The Palms TCI", chain: "Hyatt (Leading Hotels)", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 700, distinctions: ["LHW", "Forbes 4-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Turks+and+Caicos", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["PLS"] },
-  { id: 13, name: "Santorini", country: "Greece", region: "europe", image: "🏛️", vibe: "popular", types: ["baecation", "girls_trip", "beach"], bestMonths: [5,6,9,10], budgetTier: "luxury", highlight: "Sunsets, caldera views & wine",
-    tasteTags: ["photo_spots","romantic","fine_dining","natural_wine","sunrise_hike","walking_neighborhoods","architecture","luxury_splurge"],
-    hotels: [{ name: "Canaves Oia Suites", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 650, distinctions: ["LHW", "Forbes 5-Star"], checkPriceUrl: "https://www.canaves.com", comparePriceUrl: "https://maxmypoint.com" },{ name: "Mystique (Luxury Collection)", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 750, distinctions: ["LHW", "Forbes 4-Star", "FHR"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Santorini+Greece", comparePriceUrl: "https://maxmypoint.com" },{ name: "Costa Grand Resort", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 280, checkPriceUrl: "https://www.costagrand.gr", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["JTR", "ATH"] },
   { id: 15, name: "Aspen", country: "USA", region: "north_america", image: "🏂", vibe: "popular", types: ["ski", "guys_trip", "girls_trip"], bestMonths: [12,1,2,3], budgetTier: "luxury", highlight: "Powder days & luxury lodge life",
     tasteTags: ["luxury_splurge","craft_cocktails","lounge_vibes","hiking","fine_dining"],
-    hotels: [{ name: "St. Regis Aspen", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 900, distinctions: ["Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Aspen+Colorado", comparePriceUrl: "https://maxmypoint.com" },{ name: "The Little Nell", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 1200, distinctions: ["Forbes 5-Star", "LHW"], checkPriceUrl: "https://www.thelittlenell.com", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Residence Club", chain: "Hyatt", category: "Cat 6", pointsPerNight: 25000, cashPerNight: 450, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Aspen+Colorado", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Residence Club", chain: "Hyatt", category: "Cat 6", pointsPerNight: 25000, cashPerNight: 450, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Aspen+Colorado", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["ASE"] },
   { id: 16, name: "Barcelona", country: "Spain", region: "europe", image: "🎨", vibe: "popular", types: ["city", "solo", "girls_trip", "baecation", "guys_trip", "family"], bestMonths: [4,5,6,9,10], budgetTier: "mid", highlight: "Gaudí, tapas & beach culture",
     tasteTags: ["street_food","architecture","art_galleries","beach_clubs","live_music","walking_neighborhoods","vibrant_energy","rooftop_bars","coffee_culture"],
-    hotels: [{ name: "W Barcelona", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 380, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Barcelona+Spain", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Regency Barcelona", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 200, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Barcelona+Spain", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hilton Diagonal Mar", chain: "Hilton", category: "Cat 30", pointsPerNight: 50000, cashPerNight: 220, checkPriceUrl: "https://www.hilton.com/en/search/?query=Barcelona+Spain", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Regency Barcelona", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 200, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Barcelona+Spain", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["BCN"] },
   { id: 27, name: "Thailand", country: "Thailand", region: "asia", image: "🛺", vibe: "popular", types: ["solo", "city", "adventure", "guys_trip", "beach"], bestMonths: [11,12,1,2,3], budgetTier: "budget", highlight: "Temples, street food, islands & legendary nightlife — all for less",
     tasteTags: ["street_food","rooftop_bars","temple_spiritual","beach_clubs","live_music","vibrant_energy","budget_backpack","local_markets","craft_cocktails","spa_days"],
-    hotels: [{ name: "Park Hyatt Bangkok", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 350, distinctions: ["Forbes 5-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Bangkok+Thailand", comparePriceUrl: "https://maxmypoint.com" },{ name: "Marriott Bangkok Surawongse", chain: "Marriott", category: "Cat 5", pointsPerNight: 35000, cashPerNight: 140, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Bangkok+Thailand", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Regency Koh Samui", chain: "Hyatt", category: "Cat 5", pointsPerNight: 21000, cashPerNight: 200, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Koh+Samui+Thailand", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Park Hyatt Bangkok", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 350, distinctions: ["Forbes 5-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Bangkok+Thailand", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Regency Koh Samui", chain: "Hyatt", category: "Cat 5", pointsPerNight: 21000, cashPerNight: 200, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Koh+Samui+Thailand", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["BKK"] },
-  { id: 28, name: "Iceland", country: "Iceland", region: "europe", image: "🌋", vibe: "popular", types: ["adventure", "solo", "baecation"], bestMonths: [6,7,8,9,1,2,3], budgetTier: "mid", highlight: "Northern lights, glaciers, hot springs & volcanic landscapes",
-    tasteTags: ["sunrise_hike","off_grid","photo_spots","natural_wine","spa_days","luxury_splurge","chill_slow"],
-    hotels: [{ name: "The Retreat at Blue Lagoon", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 1200, distinctions: ["Forbes 5-Star"], checkPriceUrl: "https://www.bluelagoon.com/accommodation/the-retreat-hotel", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hilton Reykjavik Nordica", chain: "Hilton", category: "Cat 30", pointsPerNight: 50000, cashPerNight: 240, checkPriceUrl: "https://www.hilton.com/en/search/?query=Reykjavik+Iceland", comparePriceUrl: "https://maxmypoint.com" },{ name: "Marriott Edition Reykjavik", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 380, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Reykjavik+Iceland", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["KEF"] },
   { id: 29, name: "Dubai", country: "UAE", region: "middle_east", image: "🌃", vibe: "popular", types: ["city", "family", "baecation", "guys_trip", "beach"], bestMonths: [10,11,12,1,2,3], budgetTier: "luxury", highlight: "Supertall skyline, desert safaris, beach clubs & tax-free shopping",
     tasteTags: ["fine_dining","rooftop_bars","beach_clubs","luxury_splurge","spa_days","photo_spots","design_hotels","vibrant_energy"],
-    hotels: [{ name: "Park Hyatt Dubai", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Dubai", comparePriceUrl: "https://maxmypoint.com" },{ name: "W Dubai - The Palm", chain: "Marriott", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 420, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Dubai", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hilton Dubai Palm Jumeirah", chain: "Hilton", category: "Cat 40", pointsPerNight: 60000, cashPerNight: 300, checkPriceUrl: "https://www.hilton.com/en/search/?query=Dubai", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Park Hyatt Dubai", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Dubai", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["DXB"] },
   { id: 30, name: "Cabo", country: "Mexico", region: "north_america", image: "🏖️", vibe: "popular", types: ["beach", "baecation", "guys_trip", "girls_trip", "family"], bestMonths: [10,11,12,1,2,3,4,5], budgetTier: "mid", highlight: "Pacific sunsets, sport fishing, tacos & pool-party energy",
     tasteTags: ["beach_clubs","craft_cocktails","fine_dining","rooftop_bars","spa_days","vibrant_energy","romantic","photo_spots"],
-    hotels: [{ name: "Waldorf Astoria Los Cabos", chain: "Hilton", category: "Cat 60", pointsPerNight: 95000, cashPerNight: 700, distinctions: ["Michelin Key", "Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.hilton.com/en/search/?query=Los+Cabos+Mexico", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Ziva Los Cabos", chain: "Hyatt", category: "Cat 5", pointsPerNight: 25000, cashPerNight: 350, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Los+Cabos+Mexico", comparePriceUrl: "https://maxmypoint.com" },{ name: "Marriott Puerto Los Cabos", chain: "Marriott", category: "Cat 6", pointsPerNight: 50000, cashPerNight: 280, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Los+Cabos+Mexico", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Ziva Los Cabos", chain: "Hyatt", category: "Cat 5", pointsPerNight: 25000, cashPerNight: 350, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Los+Cabos+Mexico", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["SJD"] },
   { id: 7, name: "Cartagena", country: "Colombia", region: "south_america", image: "🌺", vibe: "hidden", types: ["baecation", "girls_trip", "beach", "city", "guys_trip"], bestMonths: [12,1,2,3,4], budgetTier: "budget", highlight: "Old City, salsa & Caribbean coast",
     tasteTags: ["street_food","craft_cocktails","rooftop_bars","live_music","walking_neighborhoods","photo_spots","vibrant_energy","beach_clubs","romantic"],
-    hotels: [{ name: "Hyatt Regency Cartagena", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 190, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Cartagena+Colombia", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hotel Charleston Santa Teresa", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 220, distinctions: ["LHW"], checkPriceUrl: "https://www.hotelcharlestonsantateresa.com", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Regency Cartagena", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 190, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Cartagena+Colombia", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["CTG"] },
-  { id: 8, name: "Banff", country: "Canada", region: "north_america", image: "🏔️", vibe: "hidden", types: ["adventure", "ski", "solo", "family"], bestMonths: [6,7,8,12,1,2], budgetTier: "mid", highlight: "Lake Louise & Rocky Mountain views",
-    tasteTags: ["hiking","sunrise_hike","off_grid","photo_spots","chill_slow","spa_days"],
-    hotels: [{ name: "Fairmont Banff Springs", chain: "Accor (Fairmont)", category: "N/A", pointsPerNight: null, cashPerNight: 400, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://all.accor.com/ssr/app/accor/hotels/Banff+Canada", comparePriceUrl: "https://maxmypoint.com" },{ name: "Delta Banff Royal Canadian", chain: "Marriott (Delta)", category: "Cat 5", pointsPerNight: 35000, cashPerNight: 220, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Banff+Canada", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["YYC"] },
   { id: 10, name: "Cape Town", country: "South Africa", region: "africa", image: "🦁", vibe: "hidden", types: ["adventure", "solo", "baecation", "guys_trip"], bestMonths: [10,11,12,1,2,3], budgetTier: "mid", highlight: "Table Mountain, wine & safaris",
     tasteTags: ["natural_wine","safari","hiking","surfing","street_food","art_galleries","rooftop_bars","vibrant_energy","farm_to_table"],
-    hotels: [{ name: "Hyatt Regency Cape Town", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 180, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Cape+Town+South+Africa", comparePriceUrl: "https://maxmypoint.com" },{ name: "One&Only Cape Town", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 650, distinctions: ["Michelin Key", "Forbes 5-Star", "LHW"], checkPriceUrl: "https://www.oneandonlyresorts.com/cape-town", comparePriceUrl: "https://maxmypoint.com" },{ name: "Marriott Crystal Towers", chain: "Marriott", category: "Cat 4", pointsPerNight: 30000, cashPerNight: 140, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Cape+Town+South+Africa", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Regency Cape Town", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 180, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Cape+Town+South+Africa", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["CPT"] },
-  { id: 12, name: "Medellín", country: "Colombia", region: "south_america", image: "🌸", vibe: "hidden", types: ["solo", "city", "adventure", "guys_trip"], bestMonths: [1,2,3,7,8,12], budgetTier: "budget", highlight: "Eternal spring, nightlife & culture",
-    tasteTags: ["street_food","club_scene","coffee_culture","walking_neighborhoods","vibrant_energy","digital_nomad","budget_backpack","live_music"],
-    hotels: [{ name: "The Charlee Hotel", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 160, checkPriceUrl: "https://www.thecharlee.com", comparePriceUrl: "https://maxmypoint.com" },{ name: "Marriott Medellín", chain: "Marriott", category: "Cat 3", pointsPerNight: 20000, cashPerNight: 120, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Medellin+Colombia", comparePriceUrl: "https://maxmypoint.com" },{ name: "Element by Westin", chain: "Marriott", category: "Cat 3", pointsPerNight: 20000, cashPerNight: 100, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Medellin+Colombia", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["MDE"] },
   { id: 14, name: "Costa Rica", country: "Costa Rica", region: "central_america", image: "🦜", vibe: "hidden", types: ["adventure", "solo", "family", "wellness"], bestMonths: [12,1,2,3,4], budgetTier: "budget", highlight: "Rainforests, volcanoes & zip lines",
     tasteTags: ["zip_line","surfing","yoga_retreat","hiking","off_grid","wildlife","farm_to_table","chill_slow","family_friendly"],
-    hotels: [{ name: "Andaz Papagayo", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Forbes 4-Star", "FHR"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Costa+Rica", comparePriceUrl: "https://maxmypoint.com" },{ name: "Marriott Hacienda Belén", chain: "Marriott", category: "Cat 4", pointsPerNight: 30000, cashPerNight: 150, checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=San+Jose+Costa+Rica", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Andaz Papagayo", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Forbes 4-Star", "FHR"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Costa+Rica", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["SJO"] },
   { id: 17, name: "Oman", country: "Oman", region: "middle_east", image: "🕌", vibe: "hidden", types: ["adventure", "solo", "baecation"], bestMonths: [10,11,12,1,2,3], budgetTier: "mid", highlight: "Dramatic wadis, desert camps & souks",
     tasteTags: ["historic_ruins","off_grid","architecture","sunrise_hike","luxury_splurge","spa_days","temple_spiritual"],
-    hotels: [{ name: "Al Bustan Palace (Ritz)", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 450, distinctions: ["Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Muscat+Oman", comparePriceUrl: "https://maxmypoint.com" },{ name: "Alila Jabal Akhdar", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Michelin Key", "Forbes 4-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Oman", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Regency Muscat", chain: "Hyatt", category: "Cat 3", pointsPerNight: 12000, cashPerNight: 140, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Muscat+Oman", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Alila Jabal Akhdar", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 500, distinctions: ["Michelin Key", "Forbes 4-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Oman", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Regency Muscat", chain: "Hyatt", category: "Cat 3", pointsPerNight: 12000, cashPerNight: 140, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Muscat+Oman", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["MCT"] },
-  { id: 18, name: "Oaxaca", country: "Mexico", region: "north_america", image: "🌮", vibe: "hidden", types: ["solo", "adventure", "city", "wellness"], bestMonths: [10,11,12,1,2,3], budgetTier: "budget", highlight: "Mezcal, mole & indigenous culture",
-    tasteTags: ["street_food","mezcal_tequila","cooking_class","local_markets","art_galleries","walking_neighborhoods","food_tours","budget_backpack"],
-    hotels: [{ name: "Hotel Sin Nombre", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 180, distinctions: ["Condé Nast Hot List"], checkPriceUrl: "https://www.hotelsinnombre.com", comparePriceUrl: "https://maxmypoint.com" },{ name: "Quinta Real Oaxaca", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 200, checkPriceUrl: "https://www.quintareal.com/en/oaxaca", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["OAX"] },
-  { id: 19, name: "Tasmania", country: "Australia", region: "oceania", image: "🌿", vibe: "hidden", types: ["adventure", "solo", "wellness"], bestMonths: [12,1,2,3], budgetTier: "mid", highlight: "MONA, wild coastlines & farm-to-table",
-    tasteTags: ["farm_to_table","hiking","natural_wine","off_grid","art_galleries","chill_slow","seafood"],
-    hotels: [{ name: "Saffire Freycinet", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 700, distinctions: ["LHW", "Forbes 5-Star"], checkPriceUrl: "https://www.saffire-freycinet.com.au", comparePriceUrl: "https://maxmypoint.com" },{ name: "MACq 01 Hotel Hobart", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 220, checkPriceUrl: "https://www.macq01.com.au", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["HBA"] },
-  { id: 20, name: "Montenegro", country: "Montenegro", region: "europe", image: "⛰️", vibe: "hidden", types: ["baecation", "adventure", "beach", "city", "guys_trip"], bestMonths: [5,6,7,8,9], budgetTier: "budget", highlight: "Bay of Kotor & Adriatic coast gems",
-    tasteTags: ["boat_day","walking_neighborhoods","seafood","photo_spots","budget_backpack","architecture","beach_clubs","romantic"],
-    hotels: [{ name: "Regent Porto Montenegro", chain: "IHG", category: "Cat 5", pointsPerNight: 40000, cashPerNight: 350, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.ihg.com/rewardsclub/us/en/redeem-rewards/hotel-rewards?query=Montenegro", comparePriceUrl: "https://maxmypoint.com" },{ name: "One&Only Portonovi", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 600, distinctions: ["Michelin Key", "Forbes 5-Star", "LHW"], checkPriceUrl: "https://www.oneandonlyresorts.com/portonovi", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["TGD"] },
-  { id: 21, name: "Luang Prabang", country: "Laos", region: "asia", image: "🏯", vibe: "hidden", types: ["solo", "adventure", "wellness"], bestMonths: [10,11,12,1,2,3], budgetTier: "budget", highlight: "Monk processions, waterfalls & night markets",
-    tasteTags: ["temple_spiritual","street_food","chill_slow","off_grid","local_markets","sunrise_hike","budget_backpack","walking_neighborhoods"],
-    hotels: [{ name: "Sofitel Luang Prabang", chain: "Accor", category: "N/A", pointsPerNight: null, cashPerNight: 250, checkPriceUrl: "https://all.accor.com/ssr/app/accor/hotels/Luang+Prabang+Laos", comparePriceUrl: "https://maxmypoint.com" },{ name: "Villa Maly Boutique", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 90, checkPriceUrl: "https://www.villa-maly.com", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["LPQ"] },
-  { id: 22, name: "Puglia", country: "Italy", region: "europe", image: "🫒", vibe: "hidden", types: ["baecation", "girls_trip", "beach", "family"], bestMonths: [5,6,7,8,9,10], budgetTier: "mid", highlight: "Trulli houses, olive groves & Adriatic beaches without the Amalfi crowds",
-    tasteTags: ["farm_to_table","natural_wine","walking_neighborhoods","photo_spots","chill_slow","romantic","local_markets","architecture"],
-    hotels: [{ name: "Masseria Torre Maizza", chain: "Marriott (Luxury Collection)", category: "Cat 7", pointsPerNight: 60000, cashPerNight: 550, distinctions: ["Michelin Key", "Forbes 5-Star", "LHW"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Puglia+Italy", comparePriceUrl: "https://maxmypoint.com" },{ name: "Borgo Egnazia", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 700, distinctions: ["Forbes 5-Star", "LHW"], checkPriceUrl: "https://www.borgoegnazia.com", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hilton Garden Inn Lecce", chain: "Hilton", category: "Cat 20", pointsPerNight: 40000, cashPerNight: 140, checkPriceUrl: "https://www.hilton.com/en/search/?query=Lecce+Italy", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["BRI"] },
   { id: 23, name: "Marrakech", country: "Morocco", region: "africa", image: "🕌", vibe: "hidden", types: ["girls_trip", "baecation", "city", "wellness"], bestMonths: [3,4,5,10,11], budgetTier: "mid", highlight: "Riads, souks, hammams & rooftop dining in the medina",
     tasteTags: ["local_markets","spa_days","rooftop_bars","street_food","photo_spots","design_hotels","walking_neighborhoods","romantic"],
-    hotels: [{ name: "Royal Mansour", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 1100, distinctions: ["Michelin Key", "Forbes 5-Star", "LHW"], checkPriceUrl: "https://www.royalmansour.com", comparePriceUrl: "https://maxmypoint.com" },{ name: "Four Seasons Marrakech", chain: "Independent (Amex FHR)", category: "FHR", pointsPerNight: null, cashPerNight: 650, distinctions: ["Forbes 5-Star", "FHR"], checkPriceUrl: "https://www.fourseasons.com/marrakech", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Regency Casablanca", chain: "Hyatt", category: "Cat 3", pointsPerNight: 12000, cashPerNight: 110, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Casablanca+Morocco", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Regency Casablanca", chain: "Hyatt", category: "Cat 3", pointsPerNight: 12000, cashPerNight: 110, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Casablanca+Morocco", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["RAK"] },
-  { id: 24, name: "Namibia", country: "Namibia", region: "africa", image: "🦓", vibe: "hidden", types: ["adventure", "solo", "baecation"], bestMonths: [5,6,7,8,9,10], budgetTier: "luxury", highlight: "Sossusvlei dunes, skeleton coast & stargazing safaris",
-    tasteTags: ["off_grid","sunrise_hike","photo_spots","chill_slow","luxury_splurge","safari"],
-    hotels: [{ name: "Zannier Sonop", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 1400, distinctions: ["Condé Nast Hot List"], checkPriceUrl: "https://www.zannierhotels.com/sonop", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hilton Windhoek", chain: "Hilton", category: "Cat 20", pointsPerNight: 30000, cashPerNight: 120, checkPriceUrl: "https://www.hilton.com/en/search/?query=Windhoek+Namibia", comparePriceUrl: "https://maxmypoint.com" },{ name: "&Beyond Sossusvlei Desert Lodge", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 950, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.andbeyond.com/our-lodges/africa/namibia/sossusvlei-desert/sossusvlei-desert-lodge", comparePriceUrl: "https://maxmypoint.com" }],
-    destinationAirports: ["WDH"] },
   { id: 25, name: "Niseko", country: "Japan", region: "asia", image: "🎿", vibe: "hidden", types: ["ski", "adventure", "guys_trip", "family"], bestMonths: [12,1,2,3], budgetTier: "luxury", highlight: "Japan's powder paradise — world-class skiing, onsens & izakayas",
     tasteTags: ["street_food","fine_dining","spa_days","off_grid","luxury_splurge","craft_cocktails"],
-    hotels: [{ name: "Park Hyatt Niseko Hanazono", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 800, distinctions: ["Forbes 5-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Niseko+Japan", comparePriceUrl: "https://maxmypoint.com" },{ name: "Higashiyama Niseko Village (Ritz)", chain: "Marriott", category: "Cat 8", pointsPerNight: 85000, cashPerNight: 650, distinctions: ["Forbes 4-Star"], checkPriceUrl: "https://www.marriott.com/search/default.mi?destinationAddress=Niseko+Japan", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hilton Niseko Village", chain: "Hilton", category: "Cat 40", pointsPerNight: 60000, cashPerNight: 350, checkPriceUrl: "https://www.hilton.com/en/search/?query=Niseko+Japan", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Park Hyatt Niseko Hanazono", chain: "Hyatt", category: "Cat 7", pointsPerNight: 30000, cashPerNight: 800, distinctions: ["Forbes 5-Star"], checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Niseko+Japan", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["CTS"] },
   { id: 26, name: "Comporta", country: "Portugal", region: "europe", image: "🌾", vibe: "hidden", types: ["beach", "baecation", "wellness", "girls_trip"], bestMonths: [5,6,7,8,9], budgetTier: "luxury", highlight: "Portugal's barefoot-luxury coast — rice paddies, wild beaches & seafood shacks",
     tasteTags: ["beach_clubs","natural_wine","farm_to_table","chill_slow","design_hotels","romantic","coffee_culture","photo_spots"],
-    hotels: [{ name: "Sublime Comporta", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 500, distinctions: ["LHW", "Forbes 4-Star"], checkPriceUrl: "https://www.sublimecomporta.pt", comparePriceUrl: "https://maxmypoint.com" },{ name: "Pestana Comporta", chain: "Independent", category: "N/A", pointsPerNight: null, cashPerNight: 350, checkPriceUrl: "https://www.pestanacollection.com/en/hotel/pestana-comporta", comparePriceUrl: "https://maxmypoint.com" },{ name: "Hyatt Regency Lisboa", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 220, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Lisbon+Portugal", comparePriceUrl: "https://maxmypoint.com" }],
+    hotels: [{ name: "Hyatt Regency Lisboa", chain: "Hyatt", category: "Cat 4", pointsPerNight: 17000, cashPerNight: 220, checkPriceUrl: "https://www.hyatt.com/shop/rooms?location=Lisbon+Portugal", comparePriceUrl: "https://maxmypoint.com" }],
     destinationAirports: ["LIS"] },
 ];
 
@@ -690,6 +646,26 @@ function getEffectivePricing(hotel, livePricing) {
   return { pointsPerNight: hotel?.pointsPerNight, cashPerNight: hotel?.cashPerNight, isLive: false };
 }
 
+function getEffectiveFlightPricing(origin, destAirport, cabin, liveFlightPricing) {
+  if (!liveFlightPricing || !origin || !destAirport) return null;
+  const routeKey = `${origin}-${destAirport}`;
+  const routeData = liveFlightPricing[routeKey];
+  if (!routeData) return null;
+  const cabinKey = cabin === "First Class" || cabin === "first" ? "first" : cabin?.toLowerCase()?.includes("business") || cabin?.toLowerCase()?.includes("polaris") || cabin?.toLowerCase()?.includes("lie-flat") ? "business" : "economy";
+  const cabinData = routeData[cabinKey];
+  if (!cabinData || !cabinData.points) return null;
+  const staleThreshold = 72 * 60 * 60 * 1000;
+  const isStale = cabinData.cachedAt && (Date.now() - cabinData.cachedAt > staleThreshold);
+  return {
+    points: cabinData.points,
+    airline: cabinData.airline,
+    program: cabinData.program,
+    direct: cabinData.direct,
+    isLive: true,
+    isStale,
+  };
+}
+
 function getBestHotelPoints(dest) {
   const r = dest.hotels.filter(h => h.pointsPerNight);
   if (!r.length) return null;
@@ -702,7 +678,7 @@ function getBestFlightMiles(flights) {
 }
 
 // Generate dynamic flight options based on user's home airport and destination
-function generateFlightOptions(homeAirport, dest) {
+function generateFlightOptions(homeAirport, dest, liveFlightPricing) {
   if (!homeAirport || !dest.destinationAirports?.length) return [];
 
   const region = dest.region;
@@ -712,6 +688,16 @@ function generateFlightOptions(homeAirport, dest) {
   const tier = REGION_TO_TIER[region] || "transatlantic";
   const routes = AIRLINE_ROUTES[tier];
   if (!routes) return [];
+
+  // Check if we have live pricing for this route
+  const liveEcon = getEffectiveFlightPricing(origin, destAirport, "economy", liveFlightPricing);
+  const liveBiz = getEffectiveFlightPricing(origin, destAirport, "business", liveFlightPricing);
+  // Also try from primaryIntl if origin differs (domestic airports)
+  const altOrigin = origin !== homeAirport.primaryIntl ? homeAirport.primaryIntl : null;
+  const altLiveEcon = altOrigin ? getEffectiveFlightPricing(altOrigin, destAirport, "economy", liveFlightPricing) : null;
+  const altLiveBiz = altOrigin ? getEffectiveFlightPricing(altOrigin, destAirport, "business", liveFlightPricing) : null;
+  const bestLiveEcon = liveEcon || altLiveEcon;
+  const bestLiveBiz = liveBiz || altLiveBiz;
 
   // Build route string: "ORD → NRT" or "ORD → DPS (via NRT)" for connecting
   const buildRoute = (airline) => {
@@ -734,15 +720,18 @@ function generateFlightOptions(homeAirport, dest) {
     if (econCount < 2 && !seen.has(econKey)) {
       const route = buildRoute(r.airline);
       const cabin = r.econCabin || "Economy";
-      // Slight variation: ±10% randomized per airline for realism
-      const jitter = 1 + ((r.airline.length % 5) - 2) * 0.03;
       const tierData = DISTANCE_TIERS[tier];
+      const jitter = 1 + ((r.airline.length % 5) - 2) * 0.03;
+      const fallbackMiles = r.econMiles || Math.round(tierData.economy * jitter / 500) * 500;
+      const fallbackCash = Math.round((tierData.cash_econ * jitter) / 10) * 10;
       flights.push({
-        airline: r.airline,
+        airline: bestLiveEcon?.airline || r.airline,
         route,
         cabin,
-        miles: r.econMiles || Math.round(tierData.economy * jitter / 500) * 500,
-        cash: Math.round((tierData.cash_econ * jitter) / 10) * 10,
+        miles: bestLiveEcon ? bestLiveEcon.points : fallbackMiles,
+        cash: fallbackCash,
+        isLive: !!bestLiveEcon,
+        program: bestLiveEcon?.program,
       });
       seen.add(econKey);
       econCount++;
@@ -751,12 +740,16 @@ function generateFlightOptions(homeAirport, dest) {
       const route = buildRoute(r.airline);
       const tierData = DISTANCE_TIERS[tier];
       const jitter = 1 + ((r.airline.length % 3) - 1) * 0.04;
+      const fallbackMiles = r.bizMiles || Math.round(tierData.business * jitter / 1000) * 1000;
+      const fallbackCash = Math.round((tierData.cash_biz * jitter) / 50) * 50;
       flights.push({
-        airline: r.airline,
+        airline: bestLiveBiz?.airline || r.airline,
         route,
         cabin: r.bizCabin,
-        miles: r.bizMiles || Math.round(tierData.business * jitter / 1000) * 1000,
-        cash: Math.round((tierData.cash_biz * jitter) / 50) * 50,
+        miles: bestLiveBiz ? bestLiveBiz.points : fallbackMiles,
+        cash: fallbackCash,
+        isLive: !!bestLiveBiz,
+        program: bestLiveBiz?.program,
       });
       seen.add(bizKey);
       bizCount++;
@@ -769,11 +762,13 @@ function generateFlightOptions(homeAirport, dest) {
     const r = routes.find(r2 => r2.bizMiles && r2.bizCabin);
     if (r) {
       flights.push({
-        airline: r.airline,
+        airline: bestLiveBiz?.airline || r.airline,
         route: buildRoute(r.airline),
         cabin: r.bizCabin,
-        miles: r.bizMiles,
+        miles: bestLiveBiz ? bestLiveBiz.points : r.bizMiles,
         cash: DISTANCE_TIERS[tier]?.cash_biz || 2000,
+        isLive: !!bestLiveBiz,
+        program: bestLiveBiz?.program,
       });
     }
   }
@@ -812,6 +807,7 @@ export default function TravelConcierge() {
   const [recapTrip, setRecapTrip] = useState(null);
   const [hydrated, setHydrated] = useState(false);
   const [livePricing, setLivePricing] = useState({});
+  const [liveFlightPricing, setLiveFlightPricing] = useState({});
 
   // Load saved data from localStorage on mount
   useEffect(() => {
@@ -842,7 +838,11 @@ export default function TravelConcierge() {
     fetch("/api/hotels/prices")
       .then(res => res.ok ? res.json() : {})
       .then(data => setLivePricing(data || {}))
-      .catch(() => {}); // Fail silently — hardcoded fallbacks always available
+      .catch(() => {});
+    fetch("/api/flights/prices")
+      .then(res => res.ok ? res.json() : {})
+      .then(data => setLiveFlightPricing(data || {}))
+      .catch(() => {});
   }, []);
 
   // Save to localStorage on every state change (debounced)
@@ -874,8 +874,8 @@ export default function TravelConcierge() {
   // Generate flight options dynamically from user's home airport
   const getFlights = useCallback((dest) => {
     if (!homeAirport) return [];
-    return generateFlightOptions(homeAirport, dest);
-  }, [homeAirport]);
+    return generateFlightOptions(homeAirport, dest, liveFlightPricing);
+  }, [homeAirport, liveFlightPricing]);
 
   const getRecommendations = useCallback(() => {
     return DESTINATIONS.map(dest => {
@@ -889,7 +889,9 @@ export default function TravelConcierge() {
       if (vibePref === "mix") score += 5;
       if (regionPrefs.length > 0) { if (regionPrefs.includes(dest.region)) score += 25; else score -= 10; }
       const bh = getBestHotelPoints(dest); const bf = getBestFlightMiles(getFlights(dest));
-      const needed = (bh ? bh.pointsPerNight*4 : 100000) + (bf ? bf.miles : 50000);
+      const epR = bh ? getEffectivePricing(bh, livePricing) : null;
+      const bhPtsR = epR ? epR.pointsPerNight : (bh?.pointsPerNight || 0);
+      const needed = (bhPtsR ? bhPtsR*4 : 100000) + (bf ? bf.miles : 50000);
       if (totalPoints >= needed) score += 25; else if (totalPoints >= needed*0.6) score += 10;
       tripHistory.forEach(trip => { const cr = trip.ratings ? Object.values(trip.ratings).reduce((a,b)=>a+b,0)/RATING_CATEGORIES.length : (trip.rating||0); if (cr >= 4) { const pd = DESTINATIONS.find(d => d.name === trip.destination); if (pd) score += dest.types.filter(t => pd.types.includes(t)).length * cr * 3; }});
       if (dest.bestMonths.includes(new Date().getMonth()+1)) score += 15;
@@ -912,7 +914,7 @@ export default function TravelConcierge() {
       }
       return { ...dest, score, tasteMatch };
     }).sort((a,b) => b.score - a.score);
-  }, [preferences, budgetPref, vibePref, regionPrefs, totalPoints, tripHistory, tasteProfile, getFlights]);
+  }, [preferences, budgetPref, vibePref, regionPrefs, totalPoints, tripHistory, tasteProfile, getFlights, livePricing]);
 
   const recommendations = getRecommendations();
   const handleSurpriseMe = () => { const top = recommendations.slice(0,5); setSurpriseResult(top[Math.floor(Math.random()*top.length)]); };
@@ -1157,13 +1159,13 @@ export default function TravelConcierge() {
         ))}
       </nav>
       <main style={{ padding: "28px", maxWidth: 1100, margin: "0 auto" }}>
-        {activeTab === "dashboard" && <DashboardView {...{userCards,userLoyalty,totalPoints,recommendations,preferences,tripHistory,goals,tasteProfile,inspoBoard,getFlights}} onExplore={()=>setActiveTab("explore")} onSelectDest={setSelectedDest} onGoals={()=>setActiveTab("goals")} onInspo={()=>setActiveTab("inspo")} onEditProfile={()=>{setOnboardingStep(1);setShowOnboarding(true);}} />}
+        {activeTab === "dashboard" && <DashboardView {...{userCards,userLoyalty,totalPoints,recommendations,preferences,tripHistory,goals,tasteProfile,inspoBoard,getFlights,livePricing}} onExplore={()=>setActiveTab("explore")} onSelectDest={setSelectedDest} onGoals={()=>setActiveTab("goals")} onInspo={()=>setActiveTab("inspo")} onEditProfile={()=>{setOnboardingStep(1);setShowOnboarding(true);}} />}
         {activeTab === "inspo" && <InspoView {...{inspoBoard,setInspoBoard,tasteProfile}} />}
         {activeTab === "wallet" && <WalletView {...{userCards,setUserCards,userLoyalty,setUserLoyalty}} onAddCard={()=>setShowAddCard(true)} onAddLoyalty={()=>setShowAddLoyalty(true)} />}
-        {activeTab === "explore" && <ExploreView {...{recommendations,totalPoints,compareList,setCompareList,getFlights}} onSelectDest={setSelectedDest} onCompare={()=>setShowCompare(true)} />}
-        {activeTab === "planner" && <PlannerView {...{plannedTrips,setPlannedTrips,userCards,userLoyalty,totalPoints,getFlights}} />}
+        {activeTab === "explore" && <ExploreView {...{recommendations,totalPoints,compareList,setCompareList,getFlights,livePricing}} onSelectDest={setSelectedDest} onCompare={()=>setShowCompare(true)} />}
+        {activeTab === "planner" && <PlannerView {...{plannedTrips,setPlannedTrips,userCards,userLoyalty,totalPoints,getFlights,livePricing}} />}
         {activeTab === "trips" && <TripsView {...{tripHistory,setTripHistory}} onAddTrip={()=>setShowTripModal(true)} onRecap={setRecapTrip} />}
-        {activeTab === "goals" && <GoalsView {...{goals,setGoals,userCards,userLoyalty,totalPoints,getFlights}} />}
+        {activeTab === "goals" && <GoalsView {...{goals,setGoals,userCards,userLoyalty,totalPoints,getFlights,livePricing}} />}
         {activeTab === "surprise" && <SurpriseView result={surpriseResult} onSurprise={handleSurpriseMe} totalPoints={totalPoints} hasWallet={(userCards.length+userLoyalty.length)>0} onPlaybook={d=>setPlaybookDest(d)} getFlights={getFlights} homeAirport={homeAirport} travelDates={travelDates} livePricing={livePricing} />}
       </main>
       <AddCardModal isOpen={showAddCard} onClose={()=>setShowAddCard(false)} userCards={userCards} onAdd={c=>{setUserCards([...userCards,c]);setShowAddCard(false);}} />
@@ -1178,9 +1180,11 @@ export default function TravelConcierge() {
 }
 
 // ============ DESTINATION CARD ============
-function DestinationCard({ dest, onClick, index=0, totalPoints, flights }) {
+function DestinationCard({ dest, onClick, index=0, totalPoints, flights, livePricing }) {
   const bh = getBestHotelPoints(dest); const bf = getBestFlightMiles(flights);
-  const needed = (bh?bh.pointsPerNight*4:999999)+(bf?bf.miles:999999);
+  const ep = bh ? getEffectivePricing(bh, livePricing) : null;
+  const bhPts = ep ? ep.pointsPerNight : (bh?.pointsPerNight || 0);
+  const needed = (bhPts?bhPts*4:999999)+(bf?bf.miles:999999);
   const affordable = totalPoints >= needed;
   const budgetColors = { budget: "#8B9E7E", mid: "#B8965A", luxury: "#C4715B" };
   return (
@@ -1201,11 +1205,11 @@ function DestinationCard({ dest, onClick, index=0, totalPoints, flights }) {
       <div style={{ background: "var(--cream)", borderRadius: 10, padding: "10px 12px", fontSize: 11 }}>
         {bh && <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: bf?5:0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 5, color: "var(--text-secondary)" }}>{I.hotel} <span style={{ fontWeight: 500, color: "var(--text-primary)" }}>{bh.name.length>28?bh.chain:bh.name}</span>{bh.distinctions && <DistinctionBadges distinctions={bh.distinctions} compact />}</div>
-          <span style={{ color: "var(--sage-dark)", fontWeight: 600 }}>{bh.pointsPerNight.toLocaleString()}/nt</span>
+          <span style={{ color: "var(--sage-dark)", fontWeight: 600 }}>{ep?.isLive && <span style={{ color: "var(--sage)", fontSize: 9, marginRight: 3 }}>●</span>}{bhPts.toLocaleString()}/nt</span>
         </div>}
         {bf && <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 5, color: "var(--text-secondary)", flexWrap: "wrap" }}>{I.plane} <span style={{ fontWeight: 500, color: "var(--text-primary)" }}>{bf.airline}</span> <Badge color="var(--sky)">{bf.cabin}</Badge></div>
-          <span style={{ color: "var(--sage-dark)", fontWeight: 600, whiteSpace: "nowrap" }}>{bf.miles.toLocaleString()} mi</span>
+          <span style={{ color: "var(--sage-dark)", fontWeight: 600, whiteSpace: "nowrap" }}>{bf.isLive && <span style={{ color: "var(--sage)", fontSize: 9, marginRight: 3 }}>●</span>}{bf.miles.toLocaleString()} mi</span>
         </div>}
         {!bh&&!bf && <div style={{ color: "var(--text-muted)" }}>Cash bookings only</div>}
       </div>
@@ -1214,14 +1218,16 @@ function DestinationCard({ dest, onClick, index=0, totalPoints, flights }) {
 }
 
 // ============ VIEWS ============
-function DashboardView({ userCards, userLoyalty, totalPoints, recommendations, preferences, onExplore, onSelectDest, tripHistory, goals, onGoals, tasteProfile, inspoBoard, onInspo, onEditProfile, getFlights }) {
+function DashboardView({ userCards, userLoyalty, totalPoints, recommendations, preferences, onExplore, onSelectDest, tripHistory, goals, onGoals, tasteProfile, inspoBoard, onInspo, onEditProfile, getFlights, livePricing }) {
   // Generate smart alerts
   const month = new Date().getMonth()+1;
   const alerts = [];
   recommendations.slice(0,8).forEach(d => {
     if (d.bestMonths.includes(month) || d.bestMonths.includes(month+1>12?1:month+1)) {
       const bh = getBestHotelPoints(d); const bf = getBestFlightMiles(getFlights(d));
-      const needed = (bh?bh.pointsPerNight*4:0)+(bf?bf.miles:0);
+      const ep = bh ? getEffectivePricing(bh, livePricing) : null;
+      const bhPts = ep ? ep.pointsPerNight : (bh?.pointsPerNight || 0);
+      const needed = (bhPts?bhPts*4:0)+(bf?bf.miles:0);
       if (needed > 0 && totalPoints >= needed) alerts.push({ type: "book", icon: "🎯", color: "var(--sage-dark)", title: `Book ${d.name} now`, desc: `Peak season coming up. You have enough points (${needed.toLocaleString()} needed).`, dest: d });
       else if (d.bestMonths.includes(month+2>12?month-10:month+2) || d.bestMonths.includes(month+3>12?month-9:month+3)) alerts.push({ type: "plan", icon: "📅", color: "var(--warm-gold)", title: `Start planning ${d.name}`, desc: `Best months are ${d.bestMonths.slice(0,3).map(m=>new Date(2024,m-1).toLocaleString('default',{month:'short'})).join(", ")}. Book 2–3 months ahead for best award availability.`, dest: d });
     }
@@ -1335,7 +1341,7 @@ function DashboardView({ userCards, userLoyalty, totalPoints, recommendations, p
           <Button variant="ghost" onClick={onExplore} style={{ fontSize: 12, color: "var(--sage)" }}>View All →</Button>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(275px, 1fr))", gap: 14 }}>
-          {recommendations.slice(0,4).map((d,i) => <DestinationCard key={d.id} dest={d} onClick={()=>onSelectDest(d)} index={i} totalPoints={totalPoints} flights={getFlights(d)} />)}
+          {recommendations.slice(0,4).map((d,i) => <DestinationCard key={d.id} dest={d} onClick={()=>onSelectDest(d)} index={i} totalPoints={totalPoints} flights={getFlights(d)} livePricing={livePricing} />)}
         </div>
       </div>
       {(userCards.length+userLoyalty.length)>0 && (
@@ -1452,7 +1458,7 @@ function WalletView({ userCards, setUserCards, userLoyalty, setUserLoyalty, onAd
   );
 }
 
-function ExploreView({ recommendations, totalPoints, onSelectDest, compareList, setCompareList, onCompare, getFlights }) {
+function ExploreView({ recommendations, totalPoints, onSelectDest, compareList, setCompareList, onCompare, getFlights, livePricing }) {
   const [tf, setTf] = useState("all"); const [vf, setVf] = useState("all");
   let filtered = recommendations;
   if (tf !== "all") filtered = filtered.filter(d => d.types.includes(tf));
@@ -1478,7 +1484,7 @@ function ExploreView({ recommendations, totalPoints, onSelectDest, compareList, 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(275px, 1fr))", gap: 14 }}>
         {filtered.map((d,i) => (
           <div key={d.id} style={{ position: "relative" }}>
-            <DestinationCard dest={d} onClick={()=>onSelectDest(d)} index={i} totalPoints={totalPoints} flights={getFlights(d)} />
+            <DestinationCard dest={d} onClick={()=>onSelectDest(d)} index={i} totalPoints={totalPoints} flights={getFlights(d)} livePricing={livePricing} />
             <button onClick={(e)=>{e.stopPropagation();toggleCompare(d.id);}} style={{
               position: "absolute", bottom: 14, right: 14, width: 30, height: 30, borderRadius: "50%",
               border: `1.5px solid ${compareList.includes(d.id)?"var(--sage)":"var(--border-strong)"}`,
@@ -1613,7 +1619,7 @@ function HotelFlightBlock({ dest, totalPoints, flights, homeAirport, travelDates
           <div key={i} style={{ padding: "10px 0", borderBottom: i<(flights||[]).length-1?"1px solid var(--border)":"none" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8 }}>
               <div><div style={{ fontSize: 13, fontWeight: 500, display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>{f.airline} <Badge color="var(--sky)">{f.cabin}</Badge></div><div style={{ fontSize: 11, color: "var(--text-secondary)", marginTop: 2 }}>{f.route}</div></div>
-              <div style={{ textAlign: "right", flexShrink: 0 }}><div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>Est. ~{f.miles.toLocaleString()} <span style={{ fontSize: 10, fontWeight: 400 }}>mi</span></div><div style={{ fontSize: 10, color: "var(--text-muted)" }}>${f.cash} cash</div></div>
+              <div style={{ textAlign: "right", flexShrink: 0 }}><div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>{f.isLive && <span style={{ color: "var(--sage)", fontSize: 9, marginRight: 3 }}>●</span>}{f.isLive ? "" : "Est. ~"}{f.miles.toLocaleString()} <span style={{ fontSize: 10, fontWeight: 400 }}>mi</span></div><div style={{ fontSize: 10, color: "var(--text-muted)" }}>${f.cash} cash</div></div>
             </div>
             {destAirport && <a href={getGoogleFlightsUrl(origin, destAirport, travelDates)} target="_blank" rel="noopener noreferrer" style={{ display: "block", marginTop: 8, padding: "10px 16px", borderRadius: 8, background: "var(--terracotta)", color: "#fff", fontSize: 12, fontWeight: 500, textAlign: "center", textDecoration: "none", letterSpacing: "0.04em", cursor: "pointer", transition: "opacity 0.2s" }} onMouseEnter={e=>e.currentTarget.style.opacity="0.88"} onMouseLeave={e=>e.currentTarget.style.opacity="1"}>Search Flights →</a>}
           </div>
@@ -1649,18 +1655,20 @@ function DestinationModal({ dest, onClose, totalPoints, userCards, userLoyalty, 
 }
 
 // ============ BOOKING PLAYBOOK ============
-function generatePlaybook(dest, userCards, userLoyalty, flights) {
+function generatePlaybook(dest, userCards, userLoyalty, flights, livePricing) {
   const C2L = { Hyatt:"hyatt", Hilton:"hilton", Marriott:"marriott", "Marriott (Autograph)":"marriott", "Marriott (Delta)":"marriott", IHG:"ihg" };
   const getCardFor = (partner) => userCards.filter(uc => { const info = CREDIT_CARDS.find(c=>c.id===uc.id); return info?.transferPartners?.includes(partner); }).map(uc=>({...uc,info:CREDIT_CARDS.find(c=>c.id===uc.id)}));
   const getLoyBal = (lid) => { const lp = userLoyalty.find(l=>l.id===lid); return lp?lp.points:0; };
   const nights = 4; const hotelOpts = []; const flightOpts = [];
 
   dest.hotels.forEach(hotel => {
-    if (!hotel.pointsPerNight) { hotelOpts.push({hotel,method:"cash",totalCost:hotel.cashPerNight*nights,cashCost:hotel.cashPerNight*nights,pointsCost:0,cppValue:0,steps:[`Book ${hotel.name} for $${(hotel.cashPerNight*nights).toLocaleString()} (${nights} nights)`],source:"Cash",priority:0}); return; }
-    const tp = hotel.pointsPerNight*nights; const cv = hotel.cashPerNight*nights; const lid = C2L[hotel.chain]||C2L[hotel.chain?.split(" ")[0]];
+    const epPB = getEffectivePricing(hotel, livePricing);
+    const hPts = epPB.pointsPerNight;
+    if (!hPts) { hotelOpts.push({hotel,method:"cash",totalCost:hotel.cashPerNight*nights,cashCost:hotel.cashPerNight*nights,pointsCost:0,cppValue:0,steps:[`Book ${hotel.name} for $${(hotel.cashPerNight*nights).toLocaleString()} (${nights} nights)`],source:"Cash",priority:0}); return; }
+    const tp = hPts*nights; const cv = hotel.cashPerNight*nights; const lid = C2L[hotel.chain]||C2L[hotel.chain?.split(" ")[0]];
     if (lid) { const bal = getLoyBal(lid); if (bal>=tp) { const cpp = (cv/tp*100).toFixed(1); hotelOpts.push({hotel,method:"direct_loyalty",totalCost:tp,cashCost:0,pointsCost:tp,cppValue:parseFloat(cpp),steps:[`Book ${hotel.name} using ${tp.toLocaleString()} ${LOYALTY_PROGRAMS.find(l=>l.id===lid)?.name||hotel.chain} points`,`Value: ${cpp}¢/pt ($${cv.toLocaleString()} room)`],source:LOYALTY_PROGRAMS.find(l=>l.id===lid)?.name||hotel.chain,priority:3}); }}
     const pn = hotel.chain?.includes("Hyatt")?"Hyatt":hotel.chain?.includes("Hilton")?"Hilton":hotel.chain?.includes("Marriott")||hotel.chain?.includes("Autograph")?"Marriott":hotel.chain?.includes("IHG")?"IHG":hotel.chain?.includes("Wyndham")?"Wyndham":hotel.chain?.includes("Accor")||hotel.chain?.includes("Fairmont")?"Accor":null;
-    if (pn) { getCardFor(pn).forEach(card => { if (card.points>=tp) { const cpp=(cv/tp*100).toFixed(1); hotelOpts.push({hotel,method:"transfer",totalCost:tp,cashCost:0,pointsCost:tp,cppValue:parseFloat(cpp),steps:[`Transfer ${tp.toLocaleString()} ${card.info.name} points → ${pn}`,`Book ${hotel.name} for ${hotel.pointsPerNight.toLocaleString()} pts/night × ${nights} nights`,`Value: ${cpp}¢/pt ($${cv.toLocaleString()} room)`],source:card.info.name,priority:4,cardId:card.id}); }}); }
+    if (pn) { getCardFor(pn).forEach(card => { if (card.points>=tp) { const cpp=(cv/tp*100).toFixed(1); hotelOpts.push({hotel,method:"transfer",totalCost:tp,cashCost:0,pointsCost:tp,cppValue:parseFloat(cpp),steps:[`Transfer ${tp.toLocaleString()} ${card.info.name} points → ${pn}`,`Book ${hotel.name} for ${hPts.toLocaleString()} pts/night × ${nights} nights`,`Value: ${cpp}¢/pt ($${cv.toLocaleString()} room)`],source:card.info.name,priority:4,cardId:card.id}); }}); }
     userCards.forEach(uc => { const info = CREDIT_CARDS.find(c=>c.id===uc.id); if (!info) return; const pp = Math.ceil(cv/(info.portalMultiplier*0.01)); if (uc.points>=pp) { hotelOpts.push({hotel,method:"portal",totalCost:pp,cashCost:0,pointsCost:pp,cppValue:info.portalMultiplier,steps:[`Book ${hotel.name} via ${info.name} portal`,`Cost: ${pp.toLocaleString()} pts for $${cv.toLocaleString()} (${info.portalMultiplier}¢/pt)`],source:`${info.name} Portal`,priority:info.portalMultiplier>=1.5?2:1,cardId:uc.id}); }});
   });
 
@@ -1682,7 +1690,7 @@ function generatePlaybook(dest, userCards, userLoyalty, flights) {
 function PlaybookModal({ dest, onClose, userCards, userLoyalty, totalPoints, getFlights, homeAirport, travelDates, livePricing }) {
   if (!dest) return null;
   if ((userCards?.length||0)+(userLoyalty?.length||0)===0) return <Modal isOpen={!!dest} onClose={onClose} title="Booking Playbook"><EmptyState icon="💳" title="Add cards first" subtitle="Add credit cards and loyalty programs to generate a playbook." /></Modal>;
-  const pb = generatePlaybook(dest, userCards, userLoyalty, getFlights(dest));
+  const pb = generatePlaybook(dest, userCards, userLoyalty, getFlights(dest), livePricing);
   const { bestHotel: bH, bestFlight: bF, nights } = pb;
   let tPts=0; let tCash=0; const src={};
   if (bH) { tPts+=bH.pointsCost; tCash+=bH.cashCost; if(bH.source)src[bH.source]=(src[bH.source]||0)+bH.pointsCost; }
@@ -2023,7 +2031,7 @@ function InspoView({ inspoBoard, setInspoBoard, tasteProfile }) {
 }
 
 // ============ TRIP PLANNER ============
-function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, totalPoints, getFlights }) {
+function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, totalPoints, getFlights, livePricing }) {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ destId: "", dates: "", nights: 4, hotelIdx: 0, flightIdx: 0, notes: "", days: [] });
 
@@ -2083,7 +2091,7 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
                     {dest.hotels.map((h,i) => (
                       <button key={i} onClick={()=>setForm({...form,hotelIdx:i})} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderRadius: 10, border: `1.5px solid ${form.hotelIdx===i?"var(--sage)":"var(--border)"}`, background: form.hotelIdx===i?"var(--sage-dim)":"var(--cream-light)", cursor: "pointer", textAlign: "left" }}>
                         <div><div style={{ fontSize: 13, fontWeight: 500 }}>{h.name}</div><div style={{ fontSize: 11, color: "var(--text-muted)" }}>{h.chain} {h.category!=="N/A"?`· ${h.category}`:""}</div><DistinctionBadges distinctions={h.distinctions} /></div>
-                        <div style={{ textAlign: "right" }}>{h.pointsPerNight ? <div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>{(h.pointsPerNight*form.nights).toLocaleString()} pts</div> : null}<div style={{ fontSize: 11, color: "var(--text-muted)" }}>${(h.cashPerNight*form.nights).toLocaleString()}</div></div>
+                        <div style={{ textAlign: "right" }}>{(() => { const epH = getEffectivePricing(h, livePricing); return epH.pointsPerNight ? <div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>{epH.isLive && <span style={{ color: "var(--sage)", fontSize: 9, marginRight: 3 }}>●</span>}{(epH.pointsPerNight*form.nights).toLocaleString()} pts</div> : null; })()}<div style={{ fontSize: 11, color: "var(--text-muted)" }}>${(h.cashPerNight*form.nights).toLocaleString()}</div></div>
                       </button>
                     ))}
                   </div>
@@ -2096,7 +2104,7 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
                     {destFlights.map((f,i) => (
                       <button key={i} onClick={()=>setForm({...form,flightIdx:i})} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 16px", borderRadius: 10, border: `1.5px solid ${form.flightIdx===i?"var(--terracotta)":"var(--border)"}`, background: form.flightIdx===i?"var(--terracotta-dim)":"var(--cream-light)", cursor: "pointer", textAlign: "left" }}>
                         <div><div style={{ fontSize: 13, fontWeight: 500 }}>{f.airline} · {f.cabin}</div><div style={{ fontSize: 11, color: "var(--text-muted)" }}>{f.route}</div></div>
-                        <div style={{ textAlign: "right" }}><div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>{f.miles.toLocaleString()} mi</div><div style={{ fontSize: 11, color: "var(--text-muted)" }}>${f.cash}</div></div>
+                        <div style={{ textAlign: "right" }}><div style={{ fontSize: 13, fontWeight: 600, color: "var(--sage-dark)" }}>{f.isLive && <span style={{ color: "var(--sage)", fontSize: 9, marginRight: 3 }}>●</span>}{f.miles.toLocaleString()} mi</div><div style={{ fontSize: 11, color: "var(--text-muted)" }}>${f.cash}</div></div>
                       </button>
                     ))}
                   </div>
@@ -2125,7 +2133,7 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
                 <div style={{ background: "var(--sage-dim)", borderRadius: 12, padding: 16, border: "1px solid var(--sage)20" }}>
                   <div style={{ fontSize: 10, fontWeight: 600, color: "var(--sage-dark)", marginBottom: 10, letterSpacing: "0.08em" }}>TRIP COST ESTIMATE</div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, fontSize: 13 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "var(--text-secondary)", fontWeight: 300 }}>Hotel ({form.nights} nights)</span><span style={{ fontWeight: 500 }}>{dest.hotels[form.hotelIdx]?.pointsPerNight ? `${(dest.hotels[form.hotelIdx].pointsPerNight*form.nights).toLocaleString()} pts` : `$${(dest.hotels[form.hotelIdx]?.cashPerNight*form.nights).toLocaleString()}`}</span></div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "var(--text-secondary)", fontWeight: 300 }}>Hotel ({form.nights} nights)</span><span style={{ fontWeight: 500 }}>{(() => { const selH = dest.hotels[form.hotelIdx]; const epS = selH ? getEffectivePricing(selH, livePricing) : null; return epS?.pointsPerNight ? `${(epS.pointsPerNight*form.nights).toLocaleString()} pts` : `$${(selH?.cashPerNight*form.nights).toLocaleString()}`; })()}</span></div>
                     <div style={{ display: "flex", justifyContent: "space-between" }}><span style={{ color: "var(--text-secondary)", fontWeight: 300 }}>Flight (RT)</span><span style={{ fontWeight: 500 }}>{destFlights[form.flightIdx]?.miles.toLocaleString()} mi</span></div>
                   </div>
                 </div>
@@ -2184,7 +2192,7 @@ function PlannerView({ plannedTrips, setPlannedTrips, userCards, userLoyalty, to
 }
 
 // ============ GOALS TRACKER ============
-function GoalsView({ goals, setGoals, userCards, userLoyalty, totalPoints, getFlights }) {
+function GoalsView({ goals, setGoals, userCards, userLoyalty, totalPoints, getFlights, livePricing }) {
   const [adding, setAdding] = useState(false);
   const [gForm, setGForm] = useState({ destId: "", cabin: "economy", hotelIdx: 0, earnRate: 5000 });
 
@@ -2195,7 +2203,8 @@ function GoalsView({ goals, setGoals, userCards, userLoyalty, totalPoints, getFl
     const allFlights = getFlights(dest);
     const flights = gForm.cabin === "business" ? allFlights.filter(f=>f.cabin.toLowerCase().includes("business")||f.cabin.toLowerCase().includes("first")) : allFlights.filter(f=>f.cabin.toLowerCase().includes("economy")||f.cabin.toLowerCase().includes("wanna"));
     const flight = flights.length ? flights.reduce((b,f)=>(!b||f.miles<b.miles)?f:b,null) : allFlights[0];
-    return (hotel?.pointsPerNight ? hotel.pointsPerNight * 4 : 0) + (flight?.miles || 0);
+    const epG = hotel ? getEffectivePricing(hotel, livePricing) : null;
+    return (epG?.pointsPerNight ? epG.pointsPerNight * 4 : 0) + (flight?.miles || 0);
   };
 
   const saveGoal = () => {

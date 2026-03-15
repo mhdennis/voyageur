@@ -20,6 +20,22 @@ import { getAllCachedPricing } from "../../../lib/cache.js";
  * }
  */
 export async function GET() {
+  // In local dev (no KV configured), proxy to the Python API server
+  const apiUrl = process.env.VOYAGEUR_API_URL || "http://localhost:8000";
+  if (!process.env.KV_REST_API_URL) {
+    try {
+      const res = await fetch(`${apiUrl}/api/hotels/prices`, { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        return NextResponse.json(data, {
+          headers: { "Cache-Control": "public, s-maxage=60" },
+        });
+      }
+    } catch (e) {
+      // Python API not running — fall through to KV or empty
+    }
+  }
+
   try {
     const pricing = await getAllCachedPricing();
 
